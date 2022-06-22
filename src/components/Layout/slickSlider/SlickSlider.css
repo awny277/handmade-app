@@ -1,0 +1,31 @@
+.Slick-Arrow {
+  display: block;
+  position: absolute;
+  top: 102%;
+  z-index: 5;
+  font-size: 2.5rem;
+  cursor: pointer;
+  color: #253b70;
+}
+
+.Slick-Arrow:hover svg {
+  color: rgb(66, 66, 66);
+}
+
+.Slick-Arrow.right-Arrow {
+  right: 45%;
+}
+
+.Slick-Arrow.left-Arrow {
+  left: 45%;
+}
+
+@media (max-width: 767.98px) { 
+  .Slick-Arrow.right-Arrow {
+    right: 35%;
+  }
+  
+  .Slick-Arrow.left-Arrow {
+    left: 35%;
+  }
+}

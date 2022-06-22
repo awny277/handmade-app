@@ -1,0 +1,57 @@
+.add-project {
+  padding: 10px;
+}
+
+.add-project h1 {
+  margin: 10px;
+}
+
+.add-project-content {
+  padding: 10px;
+}
+.add-project-content .row{
+  justify-content: space-evenly;
+}
+
+.add-project-content .cloumn {
+  box-shadow: var(--box-shadow);
+  background-color: var(--color-white);
+  margin:10px 0;
+  padding: 20px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+}
+
+.save-button {
+  border: none;
+  text-decoration: none;
+  color: var(--main-color);
+  padding: 15px 25px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  transition:  all 0.4s;
+  -webkit-transition:  all 0.4s;
+  -moz-transition:  all 0.4s;
+  -ms-transition:  all 0.4s;
+  -o-transition:  all 0.4s;
+  font-size: var(--fontsize-medium);
+  font-weight: var(--fontWeight-medium);
+  background-color: var(--color-white);
+  box-shadow: var(--box-shadow);
+}
+
+.save-button:hover {
+  color: var(--color-white);
+  border-color: var(--color-white);
+  background-color: var(--main-color);
+}
+#passwordHelpBlock {
+  margin-left: 2px;
+  color: var(--small-color) !important;
+}

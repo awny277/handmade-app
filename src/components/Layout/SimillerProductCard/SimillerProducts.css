@@ -1,0 +1,9 @@
+
+.productCards .card-image img {
+  width: 80%;
+  transition: all 0.4s;
+  -webkit-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  -ms-transition: all 0.4s;
+  -o-transition: all 0.4s;
+}
