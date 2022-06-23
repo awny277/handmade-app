@@ -1,16 +1,31 @@
 import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Outlet } from "react-router-dom";
 import AdminControl from "./AdminControl/AdminControl";
 
-const Profile = () => {
+const Profile = ({ userInfo, sepialOrder, setSpecialOrder }) => {
   return (
     <Container fluid>
-      <Row>
+      <Row className="justify-content-around">
         <Col xl={3}>
           <AdminControl />
         </Col>
-        <Col>asdasd</Col>
+        <Col xl={8}>
+          <Outlet />
+          {/* <Routes>
+            <Route path="/profile/test" element={<TesrPage />} />
+          <Route
+              path="/profile/dashBoard"
+              element={
+                <DashBoard
+                  userInfo={userInfo}
+                  sepialOrder={sepialOrder}
+                  setSpecialOrder={(data) => setSpecialOrder(data)}
+                />
+              }
+            /> 
+          </Routes> */}
+        </Col>
       </Row>
     </Container>
   );

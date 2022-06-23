@@ -3,24 +3,30 @@ import React, { useState } from "react";
 import { Container, Row, Col, Form, FloatingLabel } from "react-bootstrap";
 import Swal from "sweetalert2";
 
-const SellerDashBoard = ({ sepialOrder, setSpecialOrder }) => {
+const UserdashBoard = ({ sepialOrder, setSpecialOrder, userInfo }) => {
   const [projectTitle, setProjectTitle] = useState("");
+  const [skills, setSkills] = useState("");
   const [budget, setBudegt] = useState("");
+  const [delivarDays, setDelivaryDays] = useState("");
   const [projectDetails, setProjectDetails] = useState("");
   const [projectCategType, setProjectCategType] = useState("Clothes");
   const [projectSubCategType, setProjectSubCategType] = useState("");
-  // const [selectedImage, setSelectedImage] = useState(null);
   const [SelectImage, setSelectImage] = useState(
     "https://cdn.shopify.com/s/files/1/0108/3038/1113/products/product35_720x.jpg?v=1532677866"
   );
-  // console.log(SelectImage);
+  // const [SelectImagePc, setSelectImagePc] = useState();
+  // const formData = new FormData();
+  // formData.append("myFile", SelectImagePc);
+  // console.log(formData);
   const ResetFields = () => {
     setProjectTitle("");
+    setSkills("");
     setBudegt("");
+    setDelivaryDays("");
     setProjectDetails("");
     setProjectCategType("Clothes");
     setProjectSubCategType("");
-    window.location.reload(false);
+    // window.location.reload(false);
   };
 
   const formSumited = (e) => {
@@ -44,7 +50,9 @@ const SellerDashBoard = ({ sepialOrder, setSpecialOrder }) => {
     } else if (
       projectTitle.length === 0 ||
       budget.length === 0 ||
-      projectDetails.length === 0
+      delivarDays.length === 0 ||
+      projectDetails.length === 0 ||
+      skills.length === 0
     ) {
       e.preventDefault();
       const Toast = Swal.mixin({
@@ -64,29 +72,43 @@ const SellerDashBoard = ({ sepialOrder, setSpecialOrder }) => {
       });
     } else {
       const data = {
-        id: new Date(),
+        time: new Date(),
         budget: budget,
+        delivarDays: delivarDays,
         projectTitle: projectTitle,
         projectDetails: projectDetails,
         projectCategType: projectCategType,
+        skills: skills,
         projectSubCategType: projectSubCategType,
-        SelectImage: SelectImage,
+        // SelectImagePc: formData,
+        user: {
+          userName: userInfo.userName,
+          userAccount: userInfo.email,
+          userId: userInfo.id,
+        },
+        // SelectImagePc: SelectImagePc,
       };
       axios
-        .post("https://6259ff6a43fda1299a146d28.mockapi.io/products", {
+        .post("https://6259ff6a43fda1299a146d28.mockapi.io/specialProdect", {
           ...data,
         })
         .then(ResetFields)
         .then((err) => console.log(err));
+      // axios
+      //   .post("http://127.0.0.1:5000/", {
+      //     ...data,
+      //   })
+      //   .then(ResetFields)
+      //   .then((err) => console.log(err));
       const updateData = [...sepialOrder, data];
       setSpecialOrder(updateData);
     }
   };
 
   return (
-    <Container>
+    <Container fluid>
       <div className="add-project">
-        <h1 className="text-center">Add new product</h1>
+        <h1 className="text-center">Add a special design</h1>
         <div className="add-project-content">
           <Form className="text-center">
             <Row>
@@ -105,7 +127,7 @@ const SellerDashBoard = ({ sepialOrder, setSpecialOrder }) => {
                 </FloatingLabel>
               </Col>
               <Col className="cloumn" xs={12} md={6}>
-                {/* <FloatingLabel
+                <FloatingLabel
                   controlId="floatingInput"
                   label="Required Skills"
                 >
@@ -119,7 +141,11 @@ const SellerDashBoard = ({ sepialOrder, setSpecialOrder }) => {
                     Determine the most important skills required to implement
                     your project.
                   </Form.Text>
-                </FloatingLabel> */}
+                </FloatingLabel>
+              </Col>
+            </Row>
+            <Row>
+              <Col className="cloumn" xs={12} md={6}>
                 <FloatingLabel
                   controlId="floatingInput"
                   label="The Expected budget"
@@ -135,10 +161,21 @@ const SellerDashBoard = ({ sepialOrder, setSpecialOrder }) => {
                     Choose an appropriate budget to get good offers
                   </Form.Text>
                 </FloatingLabel>
-              </Col>
-            </Row>
-            <Row>
-              <Col className="cloumn" xs={12} md={6}>
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="The Estimated delivery time"
+                  className="mb-3"
+                >
+                  <Form.Control
+                    type="number"
+                    placeholder="Enter Estimated delivery time"
+                    value={delivarDays}
+                    onChange={(e) => setDelivaryDays(e.target.value)}
+                  />
+                  <Form.Text id="passwordHelpBlock" muted>
+                    When do you need to receive your project
+                  </Form.Text>
+                </FloatingLabel>
                 <FloatingLabel
                   controlId="floatingSelect"
                   label="Select Category Type"
@@ -205,6 +242,24 @@ const SellerDashBoard = ({ sepialOrder, setSpecialOrder }) => {
                     </Form.Text>
                   </FloatingLabel>
                 )}
+              </Col>
+              <Col className="cloumn" xs={12} md={5}>
+                <FloatingLabel
+                  controlId="floatingTextarea2"
+                  label="Project Details"
+                >
+                  <Form.Control
+                    as="textarea"
+                    placeholder="Leave Project Details here"
+                    style={{ height: "250px" }}
+                    value={projectDetails}
+                    onChange={(e) => setProjectDetails(e.target.value)}
+                  />
+                  <Form.Text id="passwordHelpBlock" muted>
+                    Enter a detailed description of your project and attach
+                    examples of what you want if possible.
+                  </Form.Text>
+                </FloatingLabel>
                 <FloatingLabel controlId="floatingInput" label="Image Url ">
                   <Form.Control
                     type="text"
@@ -216,30 +271,13 @@ const SellerDashBoard = ({ sepialOrder, setSpecialOrder }) => {
                     Include a Image Url that accurately describes your project.
                   </Form.Text>
                 </FloatingLabel>
-              </Col>
-              <Col className="cloumn" xs={12} md={5}>
-                <FloatingLabel
-                  controlId="floatingTextarea2"
-                  label="Project Details"
-                >
-                  <Form.Control
-                    as="textarea"
-                    placeholder="Leave Project Details here"
-                    style={{ maxHeight: "250px", minHeight: "150px" }}
-                    value={projectDetails}
-                    onChange={(e) => setProjectDetails(e.target.value)}
-                  />
-                  <Form.Text id="passwordHelpBlock" muted>
-                    Enter a detailed description of your project and attach
-                    examples of what you want if possible.
-                  </Form.Text>
-                </FloatingLabel>
                 {/* <Form.Group controlId="formFile" className="mb-3">
                   <Form.Label>Default file input example</Form.Label>
                   <Form.Control
                     type="file"
-                    value={SelectImage}
-                    onChange={(e) => setSelectImage(e.target.value)}
+                    // value={SelectImagePc}
+                    name="myImage"
+                    onChange={(e) => setSelectImagePc(e.target.files[0])}
                   />
                 </Form.Group> */}
               </Col>
@@ -257,27 +295,18 @@ const SellerDashBoard = ({ sepialOrder, setSpecialOrder }) => {
             </Col>
           </Row>
         </div>
-
-        {/* ------------------ */}
-        {/* <input
-          type="file"
-          name="myImage"
-          onChange={(event) => {
-            console.log(event.target.files[0]);
-            setSelectedImage(event.target.files[0]);
-          }}
-        />
-        {selectedImage && (
+        {/* {SelectImagePc && (
           <div>
             <img
               alt="not fount"
               width={"250px"}
-              src={URL.createObjectURL(selectedImage)}
+              src={URL.createObjectURL(SelectImagePc)}
             />
             <br />
-            <button onClick={() => setSelectedImage(null)}>Remove</button>
+            <button onClick={() => setSelectImagePc(null)}>Remove</button>
           </div>
         )} */}
+        {/* <img src={SelectImage} alt="tesst" /> */}
         {/* <Row>
           <Col className="cloumn" xs={12} md={5}>
             <div>
@@ -291,4 +320,4 @@ const SellerDashBoard = ({ sepialOrder, setSpecialOrder }) => {
   );
 };
 
-export default SellerDashBoard;
+export default UserdashBoard;

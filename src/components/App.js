@@ -3,7 +3,6 @@ import NavBar from "./Layout/NavBar/NavBar";
 import Home from "./Pages/Home/Home";
 import Footer from "./Layout/Footer/Footer";
 import { Route, Routes, useLocation } from "react-router-dom";
-import DashBoard from "./Pages/DashBoard/DashBoard";
 import ProductDetails from "./Pages/ProductDetails/ProductDetails";
 import axios from "axios";
 import NewProducts from "./Pages/NewProducts/NewProducts";
@@ -12,6 +11,7 @@ import SpecialProductDetailsPage from "./Pages/AddOfferPage/SpecialProductDetail
 import Cart from "./Pages/Cart/Cart";
 import CartProcess from "./Pages/CartProcess/CartProcess";
 import Profile from "./Pages/Profile/Profile";
+import DashBoard from "./Pages/Profile/DashBoard/DashBoard";
 
 // import "./App.css";
 // import DarkMode from "./Layout/DarkMode/DarkMode";
@@ -77,7 +77,7 @@ function App() {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home userInfo={userInfo} />} />
-        <Route
+        {/* <Route
           path="/dashBoard"
           element={
             <DashBoard
@@ -86,7 +86,7 @@ function App() {
               setSpecialOrder={(data) => setSpecialOrder(data)}
             />
           }
-        />
+        /> */}
         <Route
           path="/NewProducts"
           element={<NewProducts newProdcuts={addnewProdcuts} />}
@@ -110,7 +110,28 @@ function App() {
         />
         <Route path="/cart" element={<Cart userInfo={userInfo} />} />
         <Route path="/cartProcess" element={<CartProcess />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route
+          path="/profile"
+          element={
+            <Profile
+              userInfo={userInfo}
+              sepialOrder={sepialOrder}
+              setSpecialOrder={(data) => setSpecialOrder(data)}
+            />
+          }
+        >
+          {/* <Route path="/profile/test" element={<TesrPage />} /> */}
+          <Route
+            path="/profile/dashBoard"
+            element={
+              <DashBoard
+                userInfo={userInfo}
+                sepialOrder={sepialOrder}
+                setSpecialOrder={(data) => setSpecialOrder(data)}
+              />
+            }
+          />
+        </Route>
       </Routes>
       <Footer />
     </React.Fragment>

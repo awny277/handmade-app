@@ -28,16 +28,13 @@ const NavBar = ({ userInfo }) => {
             <NavLink to={"/"} data-rr-ui-event-key="#home" className="nav-link">
               Home
             </NavLink>
-            <NavLink to={"/dashBoard"} className="nav-link">
-              DashBoard
+            <NavLink to={"/NewProducts"} className="nav-link">
+              Products
             </NavLink>
           </Nav>
         </Navbar.Collapse>
         <Navbar.Collapse id="basic-navbar-nav nav-order3">
           <Nav className="me-auto">
-            <NavLink to={"/NewProducts"} className="nav-link">
-              Products
-            </NavLink>
             <NavLink to={"/specialProductPage"} className="nav-link">
               Special order
             </NavLink>
@@ -52,7 +49,7 @@ const NavBar = ({ userInfo }) => {
               >
                 <Dropdown.Item
                   onClick={() => {
-                    navigate(`/profile`);
+                    navigate(`/profile/test`);
                   }}
                 >
                   {userInfo.userName}
