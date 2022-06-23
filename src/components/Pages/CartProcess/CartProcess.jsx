@@ -28,7 +28,7 @@ const CartProcess = () => {
 
             <div className="input-01">
               <input type="text" name="" id="" placeholder="City" />
-              <input type="text" name="" id="" placeholder="State (Optinal)" />
+              <input type="text" name="" id="" placeholder="State (Optional)" />
             </div>
 
             <div className="input-04">
