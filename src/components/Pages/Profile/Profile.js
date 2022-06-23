@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import AdminControl from "./AdminControl/AdminControl";
 
 const Profile = () => {
+<<<<<<< HEAD
   return (
     <Container fluid>
       <Row>
@@ -14,6 +15,9 @@ const Profile = () => {
       </Row>
     </Container>
   );
+=======
+  return <div>Hello from profile</div>;
+>>>>>>> e719fab (update)
 };
 
 export default Profile;
