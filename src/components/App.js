@@ -11,6 +11,8 @@ import SpecialProductPage from "./Pages/specialProductPage/specialProductPage";
 import SpecialProductDetailsPage from "./Pages/AddOfferPage/SpecialProductDetailsPage";
 import Cart from "./Pages/Cart/Cart";
 import CartProcess from "./Pages/CartProcess/CartProcess";
+import Profile from "./Pages/Profile/Profile";
+
 // import "./App.css";
 // import DarkMode from "./Layout/DarkMode/DarkMode";
 // import AddOfferPage from "./Pages/AddOfferPage/SpecialProductDetailsPage";
@@ -108,6 +110,7 @@ function App() {
         />
         <Route path="/cart" element={<Cart userInfo={userInfo} />} />
         <Route path="/cartProcess" element={<CartProcess />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
       <Footer />
     </React.Fragment>
