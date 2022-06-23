@@ -13,6 +13,7 @@
   --fontWeight-normal : 400;
   --fontWeight-medium : 500;
   --fontWeight-bold : 700;
+  --hover-color:#59C7C8;
   --box-shadow : 0 2px 6px 0 rgb(67 89 113 / 12%);
 }
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import { Route, Routes, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import AdminControl from "./AdminControl/AdminControl";
 
 const Profile = ({ userInfo, sepialOrder, setSpecialOrder }) => {
@@ -12,19 +12,6 @@ const Profile = ({ userInfo, sepialOrder, setSpecialOrder }) => {
         </Col>
         <Col xl={8}>
           <Outlet />
-          {/* <Routes>
-            <Route path="/profile/test" element={<TesrPage />} />
-          <Route
-              path="/profile/dashBoard"
-              element={
-                <DashBoard
-                  userInfo={userInfo}
-                  sepialOrder={sepialOrder}
-                  setSpecialOrder={(data) => setSpecialOrder(data)}
-                />
-              }
-            /> 
-          </Routes> */}
         </Col>
       </Row>
     </Container>
