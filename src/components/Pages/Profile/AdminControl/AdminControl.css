@@ -1,0 +1,35 @@
+.AdminControl {
+  margin-top: 50px;
+  position: relative;
+  top: 0;
+  /*max-height: 250px;
+  */background-color: white;
+  padding: 15px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  box-shadow: var(--box-shadow);
+}
+.AdminControl .infromation {
+  text-align: center;
+  margin: 10px;
+}
+.AdminControl .infromation .AdminControlImage {
+  margin: 20px auto;
+  width: 120px;
+  border-radius: 20px;
+  overflow: hidden;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+}
+.AdminControl .infromation .AdminControlImage  img{
+  width: 100%;
+}
+.AdminControl ul li {
+  list-style: none;
+  padding: 10px 0;
+}
