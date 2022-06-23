@@ -8,12 +8,14 @@ import {
   Dropdown,
 } from "react-bootstrap";
 import UserRegister from "./../../Layout/UserRegister/UserRegister";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import logo from "../../../image/logo.png";
 import { BsFillPersonLinesFill } from "react-icons/bs";
 import { FaOpencart } from "react-icons/fa";
 import "./NavBar.css";
 const NavBar = ({ userInfo }) => {
+  const navigate = useNavigate();
+
   return (
     <Navbar bg="light" expand="lg" sticky="top">
       <Container fluid>
@@ -48,7 +50,13 @@ const NavBar = ({ userInfo }) => {
                 id="dropdown-basic-button"
                 title={<BsFillPersonLinesFill className="UserIcon" />}
               >
-                <Dropdown.Item>{userInfo.userName}</Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => {
+                    navigate(`/profile`);
+                  }}
+                >
+                  {userInfo.userName}
+                </Dropdown.Item>
                 <Dropdown.Divider />
                 <UserRegister />
               </DropdownButton>
