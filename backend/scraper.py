@@ -10,6 +10,7 @@ try:
         CREATE TABLE products (
             id INTEGER PRIMARY KEY,
             title TEXT,
+            description TEXT,
             price REAL,
             category TEXT,
             img_path TEXT
@@ -58,6 +59,20 @@ for category, category_url in categories_to_urls.items():
 
     for product in products:
         title = product.h3.text
+
+        if title == "Agréable Small Palm Tree Basket":
+            product_source = requests.get(f"https://handmade-egypt.com/product/agreable-small-palm-tree-basket/").text
+        elif title == "Beauteous Thin Round Rug":
+            product_source = requests.get(f"https://handmade-egypt.com/product/beauteous-thin-round-rug-2/").text
+        elif title == "Délicieux Palm Tree Waste Basket":
+            product_source = requests.get(f"https://handmade-egypt.com/product/delicieux-palm-tree-waste-basket/").text
+        elif title == "Hanging chair":
+            product_source = requests.get(f"https://handmade-egypt.com/product/hang-chair/").text
+        else:
+            product_source = requests.get(f"https://handmade-egypt.com/product/{title.lower().replace(' ', '-')}/").text
+        
+        product_soup = BeautifulSoup(product_source, "lxml")
+        description = product_soup.find("div", class_="woocommerce-Tabs-panel--description").text
         
         # Image file details
         img_url = product.find("a", class_="product-image-link").img["src"]
@@ -74,8 +89,9 @@ for category, category_url in categories_to_urls.items():
         except:
             price = 0
 
-        c.execute("INSERT INTO products(title, price, category, img_path) VALUES(:title, :price, :category, :img_path)",
-                {"title": title, "price": price, "category": category, "img_path": img_path}
+        c.execute("INSERT INTO products(title, description, price, category, img_path)\
+                    VALUES(:title, :description, :price, :category, :img_path)",
+                {"title": title, "description": description, "price": price, "category": category, "img_path": img_path}
             )
         conn.commit()
 

@@ -11,7 +11,10 @@ import SpecialProductDetailsPage from "./Pages/AddOfferPage/SpecialProductDetail
 import Cart from "./Pages/Cart/Cart";
 import CartProcess from "./Pages/CartProcess/CartProcess";
 import Profile from "./Pages/Profile/Profile";
+<<<<<<< HEAD
 import DashBoard from "./Pages/Profile/DashBoard/DashBoard";
+=======
+>>>>>>> ae62f6fac47d5e348ba0b3f17bd4ca9fba2dea10
 
 // import "./App.css";
 // import DarkMode from "./Layout/DarkMode/DarkMode";
@@ -110,6 +113,7 @@ function App() {
         />
         <Route path="/cart" element={<Cart userInfo={userInfo} />} />
         <Route path="/cartProcess" element={<CartProcess />} />
+<<<<<<< HEAD
         <Route
           path="/profile"
           element={
@@ -132,6 +136,9 @@ function App() {
             }
           />
         </Route>
+=======
+        <Route path="/profile" element={<Profile />} />
+>>>>>>> ae62f6fac47d5e348ba0b3f17bd4ca9fba2dea10
       </Routes>
       <Footer />
     </React.Fragment>

@@ -49,7 +49,11 @@ const NavBar = ({ userInfo }) => {
               >
                 <Dropdown.Item
                   onClick={() => {
+<<<<<<< HEAD
                     navigate(`/profile/test`);
+=======
+                    navigate(`/profile`);
+>>>>>>> ae62f6fac47d5e348ba0b3f17bd4ca9fba2dea10
                   }}
                 >
                   {userInfo.userName}

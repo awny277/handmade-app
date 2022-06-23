@@ -1,5 +1,6 @@
 import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
+<<<<<<< HEAD
 import { Route, Routes, Outlet } from "react-router-dom";
 import AdminControl from "./AdminControl/AdminControl";
 
@@ -29,6 +30,26 @@ const Profile = ({ userInfo, sepialOrder, setSpecialOrder }) => {
       </Row>
     </Container>
   );
+=======
+import { Route, Routes } from "react-router-dom";
+import AdminControl from "./AdminControl/AdminControl";
+
+const Profile = () => {
+<<<<<<< HEAD
+  return (
+    <Container fluid>
+      <Row>
+        <Col xl={3}>
+          <AdminControl />
+        </Col>
+        <Col>asdasd</Col>
+      </Row>
+    </Container>
+  );
+=======
+  return <div>Hello from profile</div>;
+>>>>>>> e719fab (update)
+>>>>>>> ae62f6fac47d5e348ba0b3f17bd4ca9fba2dea10
 };
 
 export default Profile;
