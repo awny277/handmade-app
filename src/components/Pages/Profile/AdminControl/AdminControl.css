@@ -32,4 +32,22 @@
 .AdminControl ul li {
   list-style: none;
   padding: 10px 0;
+  cursor: pointer;
+}
+.AdminControl ul li a {
+  color: black;
+  text-decoration: none;
+  transition: 0.3s;
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -ms-transition: 0.3s;
+  -o-transition: 0.3s;
+}
+.AdminControl ul li:hover a {
+  color: var(--hover-color);
+}
+.AdminControl ul li button {
+  margin: 0;
+  padding: 0;
+
 }

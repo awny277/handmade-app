@@ -12,6 +12,8 @@ import Cart from "./Pages/Cart/Cart";
 import CartProcess from "./Pages/CartProcess/CartProcess";
 import Profile from "./Pages/Profile/Profile";
 import DashBoard from "./Pages/Profile/DashBoard/DashBoard";
+import Setting from "./Pages/Profile/Setting/Setting";
+import ControlPanal from "./Pages/Profile/ControlPanal/ControlPanal";
 
 // import "./App.css";
 // import DarkMode from "./Layout/DarkMode/DarkMode";
@@ -110,16 +112,7 @@ function App() {
         />
         <Route path="/cart" element={<Cart userInfo={userInfo} />} />
         <Route path="/cartProcess" element={<CartProcess />} />
-        <Route
-          path="/profile"
-          element={
-            <Profile
-              userInfo={userInfo}
-              sepialOrder={sepialOrder}
-              setSpecialOrder={(data) => setSpecialOrder(data)}
-            />
-          }
-        >
+        <Route path="/profile" element={<Profile />}>
           <Route
             path="/profile/dashBoard"
             element={
@@ -130,6 +123,8 @@ function App() {
               />
             }
           />
+          <Route path="/profile/setting" element={<Setting />} />
+          <Route path="/profile/controlPanal" element={<ControlPanal />} />
         </Route>
       </Routes>
       <Footer />
