@@ -131,7 +131,7 @@ const ProductDetails = ({ addnewProject, userInfo }) => {
             {/* <p>
               deliveryDays : <span>{result.delivarDays}</span>
             </p> */}
-            <p> {result.projectDetails}</p>
+            <p> {result.description}</p>
           </div>
           <div className="card-shipping">
             <div className="card-qty">
