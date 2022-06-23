@@ -3,11 +3,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import { Route, Routes, Outlet } from "react-router-dom";
 import AdminControl from "./AdminControl/AdminControl";
 
-<<<<<<< HEAD
-const Profile = () => {
-=======
 const Profile = ({ userInfo, sepialOrder, setSpecialOrder }) => {
->>>>>>> a8a6042c169b4cbb9d9cdfa6a4131b8a323043db
   return (
     <Container fluid>
       <Row className="justify-content-around">
