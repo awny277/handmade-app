@@ -1,0 +1,128 @@
+.container-process {
+    margin-top: 30px;
+}
+
+
+.cart-process {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 100px;
+    padding: 50px 0;
+}
+
+.cart-inputs {
+    display: grid;
+    gap: 30px;
+    background-color: white;
+    padding: 30px 15px 0 15px;
+    border-radius: 10px;
+}
+
+.cart-inputs input {
+    border: 1px solid black;
+    outline: none;
+    padding: 3px 5px;
+}
+
+.cart-inputs .input-01 input {
+    width: 40%;
+}
+
+.cart-inputs .input-01 {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.cart-inputs .input-02 {
+    display: flex;
+}
+
+.cart-inputs .input-02 div {
+    width: 5%;
+    border-width: 1px 0 1px 1px;
+    border-color: black;
+    border-style: solid;
+
+}
+
+.cart-inputs .input-02 input {
+    width: 95%;
+}
+
+.cart-inputs .input-04 input {
+    width: 100%;
+}
+
+.cart-inputs .input-05  {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    cursor: pointer;
+}
+
+.cart-inputs button {
+    width: 40%;
+    text-align: center;
+    margin: auto;
+    margin-bottom: 20px;
+    background-color: white;
+    padding: 7px;
+    border: 1px solid #E2803D;
+    border-radius: 30px;
+    font-size: 25px;
+}
+
+.order-summary {
+    display: grid;
+    gap: 20px;
+}
+
+.order-price  {
+    background-color: white;
+    padding: 20px 15px 0 15px;
+    border-radius: 10px;
+}
+
+.order-price .summary01 {
+    display: flex;
+    justify-content: space-between;
+}
+
+.order-price .total {
+    padding-top: 25px;
+    border-top: 1px solid black;
+}
+
+.payment .input-06 {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    justify-content: space-between;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+.payment .input-06 input {
+    cursor: pointer;
+}
+
+
+.order-summary button {
+    width: 80%;
+    text-align: center;
+    margin: auto;
+    margin-bottom: 20px;
+    background-color: white;
+    padding: 7px 5px;
+    border: 1px solid #E2803D;
+    border-radius: 30px;
+    font-size: 20px;
+}
+
+@media (max-width :992px) {
+    .cart-process {
+        grid-template-columns: 1fr;
+    }
+}
