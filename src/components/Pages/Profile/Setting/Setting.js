@@ -16,7 +16,7 @@ const Setting = () => {
                 <input type="text" name="" id="" placeholder="Last Name" />
               </div>
   
-              <div className="input-02">
+              <div className=" input-02">
                 <div></div>
                 <input type="tel" name="" id="" placeholder="Phone Number" />
               </div>

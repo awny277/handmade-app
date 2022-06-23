@@ -3,7 +3,7 @@ import "./CartProcess.css";
 import { FaHome, FaCreditCard } from "react-icons/fa";
 
 const CartProcess = () => {
- 
+
   return (
   <div className="main-header">
     <div className="container container-process">
