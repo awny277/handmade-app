@@ -8,7 +8,7 @@ const UserRegister = () => {
   const [userInfo, setUserInfo] = useState([]);
   const [validateAccount, setValidateAccount] = useState([]);
   const navigate = useNavigate();
-
+  // http://127.0.0.1:5000/logout
   const logoutHandeller = () => {
     window.localStorage.setItem("userName", "");
     window.localStorage.setItem("password", "");
@@ -17,6 +17,7 @@ const UserRegister = () => {
     window.localStorage.setItem("isOline", "false");
     window.location.reload(false);
   };
+  // http://127.0.0.1:5000/register
   useEffect(() => {
     axios
       .get("https://6259ff6a43fda1299a146d28.mockapi.io/users")
@@ -127,14 +128,15 @@ const UserRegister = () => {
             });
             if (type) {
               axios
-                .post("https://6259ff6a43fda1299a146d28.mockapi.io/users", {
+                .post("http://127.0.0.1:5000/register", {
                   email,
                   password,
-                  userName,
+                  username: userName,
                   // userId: userId,
                   type,
                   // discount: true,
                 })
+                .then((res) => console.log(res))
                 .then((res) => {
                   window.localStorage.setItem("userName", userName);
                   window.localStorage.setItem("password", password);

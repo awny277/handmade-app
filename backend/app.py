@@ -1,5 +1,5 @@
-from crypt import methods
 import sqlite3
+from typing import Type
 from flask import Flask, request, session
 from flask_session import Session
 from flask_cors import CORS
@@ -19,54 +19,60 @@ def dict_factory(cursor, row):
         d[col[0]] = row[idx]
     return d
 
-connection = sqlite3.connect(":memory:", check_same_thread=False)
+connection = sqlite3.connect("database.db", check_same_thread=False)
 connection.row_factory = dict_factory
 cursor = connection.cursor()
 
-conn = sqlite3.connect("database.db", check_same_thread=False)
-conn.row_factory = dict_factory
-cur = conn.cursor()
+# conn = sqlite3.connect("database.db", check_same_thread=False)
+# conn.row_factory = dict_factory
+# cur = conn.cursor()
 
-cursor.execute("""CREATE TABLE users (
-    id INTEGER PRIMARY KEY,
-    username TEXT UNIQUE NOT NULL,
-    email TEXT NOT NULL,
-    hash TEXT NOT NULL
-)""")
-connection.commit()
+# cursor.execute("DROP TABLE users")
 
-cursor.execute("""CREATE TABLE products (
-    id INTEGER PRIMARY KEY,
-    title TEXT,
-    description TEXT,
-    price REAL,
-    category TEXT,
-    img_path TEXT
-)""")
-connection.commit()
+try:
+    cursor.execute("""CREATE TABLE users (
+        id INTEGER PRIMARY KEY,
+        username TEXT UNIQUE NOT NULL,
+        email TEXT NOT NULL,
+        hash TEXT NOT NULL,
+        type TEXT NOT NULL
+    )""")
+    connection.commit()
 
-cursor.execute("""CREATE TABLE carts (
-    user_id INTEGER NOT NULL,
-    product_id INTEGER NOT NULL,
-    FOREIGN KEY(user_id) REFERENCES users(id),
-    FOREIGN KEY(product_id) REFERENCES products(id)
-)""")
-connection.commit()
+    # cursor.execute("""CREATE TABLE products (
+    #     id INTEGER PRIMARY KEY,
+    #     title TEXT,
+    #     description TEXT,
+    #     price REAL,
+    #     category TEXT,
+    #     img_path TEXT
+    # )""")
+    # connection.commit()
 
-cursor.execute("""CREATE TABLE orders (
-    id INTEGER PRIMARY KEY,
-    user_id INTEGER,
-    FOREIGN KEY(user_id) REFERENCES users(id)
-)""")
-connection.commit()
+    cursor.execute("""CREATE TABLE carts (
+        user_id INTEGER NOT NULL,
+        product_id INTEGER NOT NULL,
+        FOREIGN KEY(user_id) REFERENCES users(id),
+        FOREIGN KEY(product_id) REFERENCES products(id)
+    )""")
+    connection.commit()
 
-cursor.execute("""CREATE TABLE order_items (
-    order_id INTEGER,
-    product_id INTEGER,
-    FOREIGN KEY(order_id) REFERENCES orders(id),
-    FOREIGN KEY(product_id) REFERENCES products(id)
-)""")
-connection.commit()
+    cursor.execute("""CREATE TABLE orders (
+        id INTEGER PRIMARY KEY,
+        user_id INTEGER,
+        FOREIGN KEY(user_id) REFERENCES users(id)
+    )""")
+    connection.commit()
+
+    cursor.execute("""CREATE TABLE order_items (
+        order_id INTEGER,
+        product_id INTEGER,
+        FOREIGN KEY(order_id) REFERENCES orders(id),
+        FOREIGN KEY(product_id) REFERENCES products(id)
+    )""")
+    connection.commit()
+except:
+    pass
 
 
 def get_products():
@@ -77,15 +83,15 @@ def get_products():
     Returns:
         dict - A dictionary with all the products that consists of "product_id: product" pairs
     """
-    cur.execute("SELECT * FROM products")
-    rows = cur.fetchall()
+    cursor.execute("SELECT * FROM products")
+    rows = cursor.fetchall()
     rows_dict = {}
     for index, row in enumerate(rows):
         rows_dict[index + 1] = row
     return rows_dict
 
 def get_product(product_id):
-    product = cur.execute("SELECT * FROM products WHERE id = ?", (product_id,)).fetchone()
+    product = cursor.execute("SELECT * FROM products WHERE id = ?", (product_id,)).fetchone()
     return product
 
 @app.route("/")
@@ -187,6 +193,7 @@ def register():
     username = request_data["username"]
     email = request_data["email"]
     password = request_data["password"]
+    type = request_data["type"]
 
     # Ensure username was submitted
     if not username:
@@ -199,10 +206,13 @@ def register():
     # Ensure password was submitted
     elif not password:
         return "Please enter a password."
+    
+    elif not type:
+        return "Please choose an account type."
 
     else:
         # Insert the new user into the database
-        cursor.execute("INSERT INTO users(username, email, hash) values(?, ?, ?)", (username, email, generate_password_hash(password)))
+        cursor.execute("INSERT INTO users(username, email, hash, type) values(?, ?, ?, ?)", (username, email, generate_password_hash(password), type))
 
         # Log the user in and remember him
         session["user_id"] = cursor.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()["id"]
@@ -252,3 +262,8 @@ def login():
 def logout():
     session.clear()
     return "Logged out."
+
+@app.route("/users")
+def users():
+    users = cursor.execute("SELECT * FROM users").fetchall()
+    return users
