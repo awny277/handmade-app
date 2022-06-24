@@ -265,4 +265,5 @@ def logout():
 
 @app.route("/users")
 def users():
-    users = cursor.execute("S")
+    users = cursor.execute("SELECT * FROM users").fetchall()
+    return str(users)
