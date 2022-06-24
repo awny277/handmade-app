@@ -22,10 +22,12 @@ import ControlPanal from "./Pages/Profile/ControlPanal/ControlPanal";
 function App() {
   const [addnewProdcuts, setAddnewProdcuts] = useState([]);
   const [sepialOrder, setSpecialOrder] = useState([]);
+  const [allProduct, setAllProduct] = useState([]);
   useEffect(() => {
     const getDate = async () => {
       axios.get("http://127.0.0.1:5000/products").then((res) => {
         // console.log(res);
+        setAllProduct(res.data);
         const product = Object.values(res.data);
         setAddnewProdcuts(product);
       });
@@ -72,6 +74,19 @@ function App() {
     }, [pathname]);
     return null;
   }
+  const [CartProducts, setCartProducts] = useState([]);
+  const AddtoCart = (item) => {
+    // const index
+    // const data = [...allProduct];
+    // const index = data.indexOf(item);
+    // console.log(item);
+    const product = allProduct[item.id];
+    // let price = data[index];
+    // console.log(price);
+    console.log(product);
+    const result = [...CartProducts, product];
+    setCartProducts(result);
+  };
   return (
     <React.Fragment>
       <NavBar userInfo={userInfo} />
@@ -99,6 +114,7 @@ function App() {
             <ProductDetails
               addnewProject={addnewProdcuts}
               userInfo={userInfo}
+              AddtoCart={(e) => AddtoCart(e)}
             />
           }
         />
@@ -110,9 +126,12 @@ function App() {
           path="/specialProductDetailsPage/:id"
           element={<SpecialProductDetailsPage userInfo={userInfo} />}
         />
-        <Route path="/cart" element={<Cart userInfo={userInfo} />} />
+        <Route
+          path="/cart"
+          element={<Cart userInfo={userInfo} CartProducts={CartProducts} />}
+        />
         <Route path="/cartProcess" element={<CartProcess />} />
-        <Route path="/profile" element={<Profile />}>
+        <Route path="/profile" element={<Profile userInfo={userInfo} />}>
           <Route
             path="/profile/dashBoard"
             element={
@@ -123,7 +142,10 @@ function App() {
               />
             }
           />
-          <Route path="/profile/setting" element={<Setting />} />
+          <Route
+            path="/profile/setting"
+            element={<Setting userInfo={userInfo} />}
+          />
           <Route path="/profile/controlPanal" element={<ControlPanal />} />
         </Route>
       </Routes>

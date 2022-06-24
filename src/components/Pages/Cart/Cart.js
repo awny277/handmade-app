@@ -3,86 +3,49 @@ import "./Cart.css";
 import { FaTrashAlt, FaPlus, FaMinus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-const Cart = ({ userInfo, cartItem }) => {
+const Cart = ({ userInfo, CartProducts }) => {
   const navigate = useNavigate();
-
   return (
     <div className="main-Header">
       <div className=" container container-cart">
         <h2>shopping bag</h2>
         <div className="carts">
           <div className="cart-section">
-            <h3>my shooping bag (2 items)</h3>
-
-            <div className="cart-details">
-              <div className="cart-sec01">
-                <div className="cart-img">
-                  <img
-                    src="https://www.shekodog.com/wp-content/uploads/2019/02/Ocean-Spirit.jpg"
-                    alt=""
-                  />
-                </div>
-
-                <div className="cart-check">
-                  <div className="check-01">
-                    <p>ticog bag ocean spirit</p>
-                    <span>EGP329.00</span>
+            <h3>my shooping bag ({CartProducts.length} items)</h3>
+            {CartProducts.map((ele, idx) => {
+              return (
+                <div className="cart-details" key={idx}>
+                  <div className="cart-sec01">
+                    <div className="cart-img">
+                      <img src={`${ele.img_path}`} alt="" />
+                    </div>
+                    <div className="cart-check">
+                      <div className="check-01">
+                        <p>{ele.title}</p>
+                        <span>EGP{ele.price}</span>
+                      </div>
+                      <div className="cart-num">
+                        <button type="">
+                          <FaMinus className="icon-cartNum" />
+                        </button>
+                        <span>{ele.count}</span>
+                        <button type="">
+                          <FaPlus className="icon-cartNum" />
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  <div className="cart-num">
-                    <button type="">
-                      <FaMinus className="icon-cartNum" />
-                    </button>
-                    <span>1</span>
-                    <button type="">
-                      <FaPlus className="icon-cartNum" />
-                    </button>
-                  </div>
-                </div>
-              </div>
 
-              <div className="cart-more">
-                <button>
-                  {" "}
-                  <FaTrashAlt className="icon"></FaTrashAlt>
-                </button>
-                <button type="">Add More And Keep Saving</button>
-              </div>
-            </div>
-
-            <div className="cart-details">
-              <div className="cart-sec01">
-                <div className="cart-img">
-                  <img
-                    src="https://www.shekodog.com/wp-content/uploads/2019/02/Ocean-Spirit.jpg"
-                    alt=""
-                  />
-                </div>
-
-                <div className="cart-check">
-                  <div className="check-01">
-                    <p>ticog bag ocean spirit</p>
-                    <span>EGP329.00</span>
-                  </div>
-                  <div className="cart-num">
-                    <button type="">
-                      <FaMinus className="icon-cartNum" />
+                  <div className="cart-more">
+                    <button>
+                      {" "}
+                      <FaTrashAlt className="icon"></FaTrashAlt>
                     </button>
-                    <span>1</span>
-                    <button type="">
-                      <FaPlus className="icon-cartNum" />
-                    </button>
+                    <button type="">Add More And Keep Saving</button>
                   </div>
                 </div>
-              </div>
-
-              <div className="cart-more">
-                <button>
-                  {" "}
-                  <FaTrashAlt className="icon"></FaTrashAlt>
-                </button>
-                <button type="">Add More And Keep Saving</button>
-              </div>
-            </div>
+              );
+            })}
           </div>
 
           <div className="checkout">
@@ -90,12 +53,7 @@ const Cart = ({ userInfo, cartItem }) => {
               <h4>have a promo code?</h4>
               <div className="check-sec01">
                 <div className="input-promo">
-                  <input
-                    type="text"
-                    name=""
-                    value=""
-                    placeholder="Promo Code"
-                  />
+                  <input type="text" name="" placeholder="Promo Code" />
                   <button type="">APLLY</button>
                 </div>
               </div>

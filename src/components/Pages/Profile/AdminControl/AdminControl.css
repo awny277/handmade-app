@@ -29,10 +29,17 @@
 .AdminControl .infromation .AdminControlImage  img{
   width: 100%;
 }
+.AdminControl ul {
+  padding: 0;
+}
 .AdminControl ul li {
   list-style: none;
   padding: 10px 0;
   cursor: pointer;
+  border-top: 1px solid #eee;
+}
+.AdminControl ul li:hover {
+  
 }
 .AdminControl ul li a {
   color: black;
@@ -42,12 +49,21 @@
   -moz-transition: 0.3s;
   -ms-transition: 0.3s;
   -o-transition: 0.3s;
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
 .AdminControl ul li:hover a {
   color: var(--hover-color);
+  padding-left: 10px;
 }
+
 .AdminControl ul li button {
   margin: 0;
   padding: 0;
+}
 
+.controlIcon {
+  font-size: 20px;
+  margin-right: 7px;
 }

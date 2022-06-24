@@ -18,26 +18,23 @@ import SimillerProductCard from "../../Layout/SimillerProductCard/SimillerProduc
 import "./Product.css";
 import { Col, Container, FloatingLabel, Form, Row } from "react-bootstrap";
 
-const ProductDetails = ({ addnewProject, userInfo }) => {
+const ProductDetails = ({ addnewProject, userInfo, AddtoCart }) => {
   const [result, setResult] = useState({});
   const [similler, setSimiller] = useState([]);
   const [review, setReview] = useState("");
   const [comment, setCommetns] = useState([]);
   const params = useParams();
   const [count, setCount] = useState(1);
-  const [addItemToCart, setAddItemToCart] = useState([]);
+  // const [addItemToCart, setAddItemToCart] = useState([]);
   const id = params.id;
   useEffect(() => {
     const getDate = async () => {
-      axios
-        // http://127.0.0.1:5000/product/1
-        .get(`http://127.0.0.1:5000/product/${id}`)
-        .then((res) => {
-          const product = res.data;
-          setResult(product);
-          setSimiller(simillerProducts);
-          // setCommetns(product.comments);
-        });
+      axios.get(`http://127.0.0.1:5000/product/${id}`).then((res) => {
+        const product = res.data;
+        setResult(product);
+        setSimiller(simillerProducts);
+        // setCommetns(product.comments);
+      });
     };
 
     const simillerProducts = addnewProject.filter(
@@ -110,9 +107,13 @@ const ProductDetails = ({ addnewProject, userInfo }) => {
   };
 
   const AddToCartHandeller = () => {
-    console.log("hello from cart");
-    console.log(result);
-    setAddItemToCart(result);
+    const productCount = {
+      count: count,
+      inCart: true,
+    };
+    const SendResult = { ...result, ...productCount };
+    // const SendResult = { ...result };
+    AddtoCart(SendResult);
   };
   return (
     <div className="container main-sections">
