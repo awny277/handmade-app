@@ -232,29 +232,29 @@ def login():
     request_data = request.get_json()
 
     # User reached route via POST (as by submitting a form via POST)
-    username = None
+    email = None
     password = None
 
     if request_data:
-        if "username" in request_data:
-            username = request_data["username"]
+        if "email" in request_data:
+            email = request_data["email"]
         if "password" in request_data:
             password = request_data["password"]
 
     # Ensure username was submitted
-    if not username:
-        return "Username must be provided"
+    if not email:
+        return "Email must be provided"
 
     # Ensure password was submitted
     elif not password:
         return "Password must be provided"
 
     # Query database for username
-    user = cursor.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()
+    user = cursor.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
 
     # Ensure username exists and password is correct
     if not user or not check_password_hash(user["hash"], password):
-        return "Invalid username and/or password"
+        return "Invalid email and/or password"
 
     else:
         # Remember which user has logged in
