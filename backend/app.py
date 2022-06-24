@@ -1,7 +1,7 @@
+from crypt import methods
 import sqlite3
-from urllib import response
-from flask import Flask, render_template, redirect, request, url_for, session
-#from flask_session import Session
+from flask import Flask, request, session
+from flask_session import Session
 from flask_cors import CORS
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -10,7 +10,7 @@ CORS(app)
 
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
-#Session(app)
+Session(app)
 
 # Convert return value of cursor.fetchall() to a dictionary
 def dict_factory(cursor, row):
@@ -35,6 +35,40 @@ cursor.execute("""CREATE TABLE users (
 )""")
 connection.commit()
 
+cursor.execute("""CREATE TABLE products (
+    id INTEGER PRIMARY KEY,
+    title TEXT,
+    description TEXT,
+    price REAL,
+    category TEXT,
+    img_path TEXT
+)""")
+connection.commit()
+
+cursor.execute("""CREATE TABLE carts (
+    user_id INTEGER NOT NULL,
+    product_id INTEGER NOT NULL,
+    FOREIGN KEY(user_id) REFERENCES users(id),
+    FOREIGN KEY(product_id) REFERENCES products(id)
+)""")
+connection.commit()
+
+cursor.execute("""CREATE TABLE orders (
+    id INTEGER PRIMARY KEY,
+    user_id INTEGER,
+    FOREIGN KEY(user_id) REFERENCES users(id)
+)""")
+connection.commit()
+
+cursor.execute("""CREATE TABLE order_items (
+    order_id INTEGER,
+    product_id INTEGER,
+    FOREIGN KEY(order_id) REFERENCES orders(id),
+    FOREIGN KEY(product_id) REFERENCES products(id)
+)""")
+connection.commit()
+
+
 def get_products():
     """
     Query the list of products and convert it to a dictionary
@@ -51,8 +85,8 @@ def get_products():
     return rows_dict
 
 def get_product(product_id):
-    cur.execute("SELECT * FROM products WHERE id = ?", (product_id,))
-    return cur.fetchone()
+    product = cur.execute("SELECT * FROM products WHERE id = ?", (product_id,)).fetchone()
+    return product
 
 @app.route("/")
 def index():
@@ -69,6 +103,79 @@ def product(product_id):
     """Send a single product details to client"""
     product_ = get_product(product_id)
     return product_
+
+@app.post("/add_product")
+def add_product():
+    request_data = request.get_json()
+
+    title = None
+    description = None
+    price = None
+    category = None
+    img_path = None
+
+    if request_data:
+        if "title" in request_data:
+            title = request_data["title"]
+        if "description" in request_data:
+            description = request_data["description"]
+        if "price" in request_data:
+            price = request_data["price"]
+        if "category" in request_data:
+            category = request_data["category"]
+        if "img_path" in request_data:
+            img_path = request_data["img_path"]
+
+    if not title or not description or not price or not category or not img_path:
+        return "Failed."
+
+    cursor.execute("INSERT INTO products(title, description, price, category, img_path) VALUES(?, ?, ?, ?, ?)",
+                    (title, description, price, category, img_path))
+    return "Product added."
+
+@app.post("/add_cart")
+def add_cart():
+    request_data = request.get_json()
+    
+    product_id = None
+
+    if request_data:
+        if "product_id" in request_data:
+            product_id = request_data["product_id"]
+    
+    if not product_id:
+        return "Failed to add item to cart."
+
+    cursor.execute("INSERT INTO carts VALUES(?, ?)", (session["user_id"], product_id))
+    return "Added to cart!"
+
+@app.route("/get_cart")
+def get_cart():
+    products = cursor.execute("""SELECT * FROM products WHERE id IN
+                                 (SELECT product_id FROM carts WHERE user_id = ?)""", (session["user_id"],)).fetchall()
+    return str(products)
+
+@app.post("/order")
+def order():
+    cursor.execute("INSERT INTO orders(user_id) VALUES(?)", (session["user_id"],))
+    order_id = cursor.execute("SELECT id FROM orders WHERE user_id = ?", (session["user_id"],)).fetchall()[-1]["id"]
+    
+    request_data = request.get_json()
+
+    products_ids = None
+
+    if request_data:
+        if "products_ids" in request_data:
+            products_ids = request_data["products_ids"]
+    
+    if not products:
+        return "Failed to place order"
+    
+    for product_id in products_ids:
+        cursor.execute("INSERT INTO order_items VALUES(?, ?)", (order_id, product_id))
+    
+    return "Order placed!"
+
 
 @app.post("/register")
 def register():
