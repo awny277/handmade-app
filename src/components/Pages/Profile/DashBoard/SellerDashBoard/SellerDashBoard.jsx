@@ -64,20 +64,22 @@ const SellerDashBoard = ({ sepialOrder, setSpecialOrder }) => {
       });
     } else {
       const data = {
-        id: new Date(),
-        budget: budget,
-        projectTitle: projectTitle,
-        projectDetails: projectDetails,
-        projectCategType: projectCategType,
-        projectSubCategType: projectSubCategType,
-        SelectImage: SelectImage,
+        // id: new Date(),
+        price: budget,
+        title: projectTitle,
+        description: projectDetails,
+        category: projectCategType,
+        // projectSubCategType: projectSubCategType,
+        img_path: SelectImage,
       };
+      // http://127.0.0.1:5000/add_product
       axios
-        .post("https://6259ff6a43fda1299a146d28.mockapi.io/products", {
+        .post("http://127.0.0.1:5000/add_product", {
           ...data,
         })
-        .then(ResetFields)
-        .then((err) => console.log(err));
+        .then((res) => console.log(res))
+        // .then(ResetFields)
+        .catch((err) => console.log(err));
       const updateData = [...sepialOrder, data];
       setSpecialOrder(updateData);
     }
