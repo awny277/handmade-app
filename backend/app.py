@@ -136,6 +136,7 @@ def add_product():
 
     cursor.execute("INSERT INTO products(title, description, price, category, img_path) VALUES(?, ?, ?, ?, ?)",
                     (title, description, price, category, img_path))
+    connection.commit()
     return "Product added."
 
 @app.post("/add_cart")
@@ -152,6 +153,7 @@ def add_cart():
         return "Failed to add item to cart."
 
     cursor.execute("INSERT INTO carts VALUES(?, ?)", (session["user_id"], product_id))
+    connection.commit()
     return "Added to cart!"
 
 @app.route("/get_cart")
@@ -163,6 +165,7 @@ def get_cart():
 @app.post("/order")
 def order():
     cursor.execute("INSERT INTO orders(user_id) VALUES(?)", (session["user_id"],))
+    connection.commit()
     order_id = cursor.execute("SELECT id FROM orders WHERE user_id = ?", (session["user_id"],)).fetchall()[-1]["id"]
     
     request_data = request.get_json()
@@ -178,6 +181,7 @@ def order():
     
     for product_id in products_ids:
         cursor.execute("INSERT INTO order_items VALUES(?, ?)", (order_id, product_id))
+        connection.commit()
     
     return "Order placed!"
 
@@ -212,6 +216,7 @@ def register():
     else:
         # Insert the new user into the database
         cursor.execute("INSERT INTO users(username, email, hash, type) values(?, ?, ?, ?)", (username, email, generate_password_hash(password), type))
+        connection.commit()
 
         # Log the user in and remember him
         session["user_id"] = cursor.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()["id"]
