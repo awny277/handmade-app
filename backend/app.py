@@ -260,7 +260,7 @@ def login():
         # Remember which user has logged in
         session["user_id"] = user["id"]
 
-        return {"message": "You logged in successfully!", "id": str(user[id])}
+        return {"message": "You logged in successfully!", "id": user["id"]}
 
 @app.route("/logout")
 def logout():
