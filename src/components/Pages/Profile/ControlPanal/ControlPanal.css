@@ -1,0 +1,92 @@
+.control-process {
+    background-color: white;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+.control-process .control-01 img {
+    width: 100px;
+    height: 90px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}
+
+
+.control-process p {
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.control-process span{
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    text-transform: lowercase;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.special-span {
+    font-size: 20px !important;
+    text-transform: capitalize !important;
+}
+
+.control-process .control-05 {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.control-05 button:first-of-type {
+    background-color: white;
+    color: green;
+    text-transform: uppercase;
+    font-size: 13px;
+    padding: 7px;
+    border-radius: 36px;
+    border: 1px solid green;
+}
+
+.control-05 button:last-of-type {
+    background-color: white;
+    color: red;
+    text-transform: uppercase;
+    font-size: 13px;
+    padding: 7px;
+    border-radius: 36px;
+    border: 1px solid red;
+}
+
+@media (max-width:770px) {
+    .control-process {
+        grid-template-columns: repeat(3,1fr);
+    }
+
+    .control-process {
+        grid-template-rows: repeat(2,1fr);
+    }
+    .control-05 {
+        grid-column-end: 4;
+        grid-column-start: 2;
+        justify-content: space-evenly;
+    }
+
+
+    .control-05 button {
+        font-size: 15px !important;
+        padding: 10px !important;
+    }
+}
