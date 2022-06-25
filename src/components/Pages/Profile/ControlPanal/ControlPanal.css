@@ -12,6 +12,7 @@
     -moz-border-radius: 10px;
     -ms-border-radius: 10px;
     -o-border-radius: 10px;
+    margin: 10px 0;
 }
 
 .control-process .control-01 img {
@@ -23,7 +24,6 @@
     -ms-border-radius: 50%;
     -o-border-radius: 50%;
 }
-
 
 .control-process p {
     font-weight: bold;
@@ -83,7 +83,6 @@
         grid-column-start: 2;
         justify-content: space-evenly;
     }
-
 
     .control-05 button {
         font-size: 15px !important;

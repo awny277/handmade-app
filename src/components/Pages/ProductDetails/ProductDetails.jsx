@@ -184,7 +184,7 @@ const ProductDetails = ({ addnewProject, userInfo, AddtoCart }) => {
           </div>
         </div>
       </div>
-      <div className="review">
+      {/* <div className="review">
         <h2>Review</h2>
         <FloatingLabel controlId="floatingTextarea2" label="Review">
           <Form.Control
@@ -202,7 +202,7 @@ const ProductDetails = ({ addnewProject, userInfo, AddtoCart }) => {
         <button className="btn btn-outline-primary" onClick={ReviewSubmit}>
           send review
         </button>
-      </div>
+      </div> */}
       <hr />
       <h1 className="text-center">similler Products</h1>
       <Container>
