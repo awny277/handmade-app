@@ -192,49 +192,60 @@ const UserRegister = () => {
           },
         });
         if (password) {
-          // If Password or email Rong return Reister
-          if (loginValidate.password.toLowerCase() === password.toLowerCase()) {
-            const obj = {
-              userName: loginValidate.userName,
-              email: loginValidate.email,
-              password: loginValidate.password,
-            };
-            axios
-              .put(
-                "https://6259ff6a43fda1299a146d28.mockapi.io/users/" +
-                  loginValidate.id,
-                { ...obj }
-              )
-              .then((res) => {
-                window.localStorage.setItem("userID", res.data.id);
-                window.localStorage.setItem("isOline", "true");
-                window.location.reload(false);
-              })
-              .catch((err) => console.log(err));
-            navigate("/");
-            // OfferHandler();
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: "Emaill or Password is Wrong",
-              footer: `<button class="Forget btn" >Forget Password</button>`,
+          axios
+            .post("http://127.0.0.1:5000/login", {
+              email,
+              password,
+            })
+            .then((res) => {
+              window.localStorage.setItem("userID", res.data.id);
+              window.localStorage.setItem("isOline", "true");
+              // window.location.reload(false);
             });
-            document.querySelector(".Forget").onclick = () => {
-              HandelForgetPassword();
-            };
-          }
         }
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Emaill or Password is Wrong",
-          footer: `<button class="Forget btn" >Forget Password</button>`,
-        });
-        document.querySelector(".Forget").onclick = () => {
-          HandelForgetPassword();
-        };
+        // If Password or email Rong return Reister
+        //     if (loginValidate.password.toLowerCase() === password.toLowerCase()) {
+        //       const obj = {
+        //         userName: loginValidate.userName,
+        //         email: loginValidate.email,
+        //         password: loginValidate.password,
+        //       };
+        //       axios
+        //         .put(
+        //           "https://6259ff6a43fda1299a146d28.mockapi.io/users/" +
+        //             loginValidate.id,
+        //           { ...obj }
+        //         )
+        // .then((res) => {
+        //   window.localStorage.setItem("userID", res.data.id);
+        //   window.localStorage.setItem("isOline", "true");
+        //   window.location.reload(false);
+        // })
+        //         .catch((err) => console.log(err));
+        //       navigate("/");
+        //       // OfferHandler();
+        //     } else {
+        //       Swal.fire({
+        //         icon: "error",
+        //         title: "Oops...",
+        //         text: "Emaill or Password is Wrong",
+        //         footer: `<button class="Forget btn" >Forget Password</button>`,
+        //       });
+        //       document.querySelector(".Forget").onclick = () => {
+        //         HandelForgetPassword();
+        //       };
+        //     }
+        //   }
+        // } else {
+        //   Swal.fire({
+        //     icon: "error",
+        //     title: "Oops...",
+        //     text: "Emaill or Password is Wrong",
+        //     footer: `<button class="Forget btn" >Forget Password</button>`,
+        //   });
+        //   document.querySelector(".Forget").onclick = () => {
+        //     HandelForgetPassword();
+        //   };
       }
     }
   };

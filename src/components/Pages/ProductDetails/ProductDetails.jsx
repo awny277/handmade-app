@@ -106,14 +106,21 @@ const ProductDetails = ({ addnewProject, userInfo, AddtoCart }) => {
     }
   };
 
+  //add_cart
   const AddToCartHandeller = () => {
-    const productCount = {
-      count: count,
-      inCart: true,
-    };
-    const SendResult = { ...result, ...productCount };
-    // const SendResult = { ...result };
-    AddtoCart(SendResult);
+    // const productCount = {
+    //   count: count,
+    //   inCart: true,
+    // };
+    // const SendResult = { ...result, ...productCount };
+    // // const SendResult = { ...result };
+    // AddtoCart(SendResult);
+    axios
+      .post("http://127.0.0.1:5000/add_cart", {
+        product_id: result.id,
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   };
   return (
     <div className="container main-sections">
