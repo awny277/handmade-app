@@ -10,12 +10,17 @@ const UserRegister = () => {
   const navigate = useNavigate();
   //get  http://127.0.0.1:5000/logout
   const logoutHandeller = () => {
-    window.localStorage.setItem("userName", "");
-    window.localStorage.setItem("password", "");
-    window.localStorage.setItem("email", "");
-    window.localStorage.setItem("userID", "");
-    window.localStorage.setItem("isOline", "false");
-    window.location.reload(false);
+    axios
+      .get("http://127.0.0.1:5000/logout")
+      .then((res) => console.log(res))
+      .then(() => {
+        window.localStorage.setItem("userName", "");
+        window.localStorage.setItem("password", "");
+        window.localStorage.setItem("email", "");
+        window.localStorage.setItem("userID", "");
+        window.localStorage.setItem("isOline", "false");
+        window.location.reload(false);
+      });
   };
   // http://127.0.0.1:5000/register
   useEffect(() => {
