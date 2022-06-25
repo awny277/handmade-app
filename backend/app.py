@@ -1,3 +1,4 @@
+from os import stat
 import sqlite3
 from flask import Flask, request, session
 from flask_session import Session
@@ -22,56 +23,49 @@ connection = sqlite3.connect("database.db", check_same_thread=False)
 connection.row_factory = dict_factory
 cursor = connection.cursor()
 
-# conn = sqlite3.connect("database.db", check_same_thread=False)
-# conn.row_factory = dict_factory
-# cur = conn.cursor()
+cursor.execute("DROP TABLE users")
 
-# cursor.execute("DROP TABLE users")
+try:
+    cursor.execute("""CREATE TABLE users (
+        id INTEGER PRIMARY KEY,
+        username TEXT UNIQUE NOT NULL,
+        email TEXT NOT NULL,
+        hash TEXT NOT NULL,
+        type TEXT NOT NULL,
+        firstname TEXT,
+        lastname TEXT,
+        phone_number TEXT,
+        city TEXT,
+        state TEXT,
+        address_1 TEXT,
+        address_2 TEXT
+    )""")
+    connection.commit()
 
-# try:
-#     cursor.execute("""CREATE TABLE users (
-#         id INTEGER PRIMARY KEY,
-#         username TEXT UNIQUE NOT NULL,
-#         email TEXT NOT NULL,
-#         hash TEXT NOT NULL,
-#         type TEXT NOT NULL
-#     )""")
-#     connection.commit()
+    cursor.execute("""CREATE TABLE carts (
+        user_id INTEGER NOT NULL,
+        product_id INTEGER NOT NULL,
+        FOREIGN KEY(user_id) REFERENCES users(id),
+        FOREIGN KEY(product_id) REFERENCES products(id)
+    )""")
+    connection.commit()
 
-#     # cursor.execute("""CREATE TABLE products (
-#     #     id INTEGER PRIMARY KEY,
-#     #     title TEXT,
-#     #     description TEXT,
-#     #     price REAL,
-#     #     category TEXT,
-#     #     img_path TEXT
-#     # )""")
-#     # connection.commit()
+    cursor.execute("""CREATE TABLE orders (
+        id INTEGER PRIMARY KEY,
+        user_id INTEGER,
+        FOREIGN KEY(user_id) REFERENCES users(id)
+    )""")
+    connection.commit()
 
-#     cursor.execute("""CREATE TABLE carts (
-#         user_id INTEGER NOT NULL,
-#         product_id INTEGER NOT NULL,
-#         FOREIGN KEY(user_id) REFERENCES users(id),
-#         FOREIGN KEY(product_id) REFERENCES products(id)
-#     )""")
-#     connection.commit()
-
-#     cursor.execute("""CREATE TABLE orders (
-#         id INTEGER PRIMARY KEY,
-#         user_id INTEGER,
-#         FOREIGN KEY(user_id) REFERENCES users(id)
-#     )""")
-#     connection.commit()
-
-#     cursor.execute("""CREATE TABLE order_items (
-#         order_id INTEGER,
-#         product_id INTEGER,
-#         FOREIGN KEY(order_id) REFERENCES orders(id),
-#         FOREIGN KEY(product_id) REFERENCES products(id)
-#     )""")
-#     connection.commit()
-# except:
-#     pass
+    cursor.execute("""CREATE TABLE order_items (
+        order_id INTEGER,
+        product_id INTEGER,
+        FOREIGN KEY(order_id) REFERENCES orders(id),
+        FOREIGN KEY(product_id) REFERENCES products(id)
+    )""")
+    connection.commit()
+except:
+    pass
 
 
 def get_products():
@@ -134,9 +128,10 @@ def add_product():
     if not title or not description or not price or not category or not img_path:
         return "Failed."
 
-    cursor.execute("INSERT INTO products(title, description, price, category, img_path) VALUES(?, ?, ?, ?, ?)",
-                    (title, description, price, category, img_path))
-    connection.commit()
+    with connection:
+        cursor.execute("INSERT INTO products(title, description, price, category, img_path) VALUES(?, ?, ?, ?, ?)",
+                        (title, description, price, category, img_path))
+    
     return "Product added."
 
 @app.post("/add_cart")
@@ -152,8 +147,9 @@ def add_cart():
     if not product_id:
         return "Failed to add item to cart."
 
-    cursor.execute("INSERT INTO carts VALUES(?, ?)", (session["user_id"], product_id))
-    connection.commit()
+    with connection:
+        cursor.execute("INSERT INTO carts VALUES(?, ?)", (session["user_id"], product_id))
+
     return "Added to cart!"
 
 @app.route("/get_cart")
@@ -164,8 +160,9 @@ def get_cart():
 
 @app.post("/order")
 def order():
-    cursor.execute("INSERT INTO orders(user_id) VALUES(?)", (session["user_id"],))
-    connection.commit()
+    with connection:
+        cursor.execute("INSERT INTO orders(user_id) VALUES(?)", (session["user_id"],))
+
     order_id = cursor.execute("SELECT id FROM orders WHERE user_id = ?", (session["user_id"],)).fetchall()[-1]["id"]
     
     request_data = request.get_json()
@@ -180,8 +177,8 @@ def order():
         return "Failed to place order"
     
     for product_id in products_ids:
-        cursor.execute("INSERT INTO order_items VALUES(?, ?)", (order_id, product_id))
-        connection.commit()
+        with connection:
+            cursor.execute("INSERT INTO order_items VALUES(?, ?)", (order_id, product_id))
     
     return "Order placed!"
 
@@ -215,8 +212,8 @@ def register():
 
     else:
         # Insert the new user into the database
-        cursor.execute("INSERT INTO users(username, email, hash, type) values(?, ?, ?, ?)", (username, email, generate_password_hash(password), type))
-        connection.commit()
+        with connection:
+            cursor.execute("INSERT INTO users(username, email, hash, type) values(?, ?, ?, ?)", (username, email, generate_password_hash(password), type))
 
         # Log the user in and remember him
         session["user_id"] = cursor.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()["id"]
@@ -276,3 +273,65 @@ def users():
 def schema():
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
     return str(cursor.fetchall())
+
+@app.post("/set_profile")
+def set_profile():
+    """Set or update user info"""
+    
+    request_data = request.get_json()
+
+    firstname = None
+    lastname = None
+    phone_number = None
+    city = None
+    state = None
+    address_1 = None
+    address_2 = None
+
+    if request_data:
+        if "firstname" in request_data:
+            firstname = request_data["firstname"]
+        if "lastname" in request_data:
+            lastname = request_data["lastname"]
+        if "phone_number" in request_data:
+            phone_number = request_data["phone_number"]
+        if "city" in request_data:
+            city = request_data["city"]
+        if "state" in request_data:
+            state = request_data["state"]
+        if "address_1" in request_data:
+            address_1 = request_data["address_1"]
+        if "address_2" in request_data:
+            address_2 = request_data["address_2"]
+    
+    with connection:
+        if state and address_2:
+            cursor.execute("""INSERT INTO users(firstname, lastname, phone_number, city, state, address_1, address_2)
+                            VALUES(:firstname, :lastname, :phone_number, :city, :state, :address_1, :address_2)""",
+                            {"firstname": firstname, "lastname": lastname, "phone_number": phone_number,
+                            "city": city, "state": state, "address_1": address_1, "address_2": address_2})
+        elif state and not address_2:
+            cursor.execute("""INSERT INTO users(firstname, lastname, phone_number, city, state, address_1)
+                            VALUES(:firstname, :lastname, :phone_number, :city, :state, :address_1)""",
+                            {"firstname": firstname, "lastname": lastname, "phone_number": phone_number,
+                            "city": city, "state": state, "address_1": address_1})
+        elif not state and address_2:
+            cursor.execute("""INSERT INTO users(firstname, lastname, phone_number, city, address_1, address_2)
+                            VALUES(:firstname, :lastname, :phone_number, :city, :address_1, :address_2)""",
+                            {"firstname": firstname, "lastname": lastname, "phone_number": phone_number,
+                            "city": city, "address_1": address_1, "address_2": address_2})
+        else:
+            cursor.execute("""INSERT INTO users(firstname, lastname, phone_number, city, address_1)
+                            VALUES(:firstname, :lastname, :phone_number, :city, :address_1)""",
+                            {"firstname": firstname, "lastname": lastname, "phone_number": phone_number,
+                            "city": city, "address_1": address_1})
+    
+    return "Profile updated."
+
+@app.route("/get_profile")
+def get_profile():
+    """Send user info back to the client"""
+
+    user_info = cursor.execute("""SELECT firstname, lastname, phone_number, city, state, address_1, address_2
+                    FROM users WHERE id = ?""", (session["user_id"],)).fetchone()
+    return user_info
