@@ -22,6 +22,20 @@ connection = sqlite3.connect("database.db", check_same_thread=False)
 connection.row_factory = dict_factory
 cursor = connection.cursor()
 
+cursor.execute("""CREATE TABLE special_orders (
+        id INTEGER PRIMARY KEY,
+        user_id INTEGER,
+        title TEXT UNIQUE NOT NULL,
+        description TEXT NOT NULL,
+        required_skills TEXT NOT NULL,
+        est_delivery_time TEXT NOT NULL,
+        expected_budget TEXT,
+        category TEXT,
+        sub_category TEXT,
+        img_url TEXT
+    )""")
+connection.commit()
+
 try:
     cursor.execute("""CREATE TABLE users (
         id INTEGER PRIMARY KEY,
@@ -325,10 +339,57 @@ def set_profile():
     
     return "Profile updated."
 
-@app.route("/get_profile")
-def get_profile():
+@app.route("/profile")
+def profile():
     """Send user info back to the client"""
 
     user_info = cursor.execute("""SELECT firstname, lastname, phone_number, city, state, address_1, address_2
                     FROM users WHERE id = ?""", (session["user_id"],)).fetchone()
     return user_info
+
+@app.post("/add_special_order")
+def add_special_order():
+    request_data = request.get_json()
+
+    title = None
+    description = None
+    required_skills = None
+    est_delivery_time = None
+    expected_budget = None
+    category = None
+    sub_category = None
+    img_url = None
+
+    if request_data:
+        if "title" in request_data:
+            title = request_data["title"]
+        if "description" in request_data:
+            description = request_data["description"]
+        if "required_skills" in request_data:
+            required_skills = request_data["required_skills"]
+        if "est_delivery_time" in request_data:
+            est_delivery_time = request_data["est_delivery_time"]
+        if "expected_budget" in request_data:
+            expected_budget = request_data["expected_budget"]
+        if "category" in request_data:
+            category = request_data["category"]
+        if "sub_category" in request_data:
+            sub_category = request_data["sub_category"]
+        if "img_url" in request_data:
+            img_url = request_data["img_url"]
+
+    if not title or not description or not required_skills or not expected_budget\
+         or not est_delivery_time or not category or not sub_category or not img_url:
+        return "Failed."
+
+    with connection:
+        cursor.execute("""INSERT INTO products(title, description, required_skills, est_delivery_time, expected_budget, category, sub_category, img_url)
+                        VALUES(?, ?, ?, ?, ?, ?, ?, ?) WHERE user_id = ?""",
+                        (title, description, required_skills, est_delivery_time, expected_budget, category, sub_category, img_url, session["user_id"]))
+    
+    return "Special order added."
+
+@app.route("/special_orders")
+def special_orders():
+    special_orders_ = cursor.execute("SELECT * FROM special_orders WHERE user_id = ?", (session["user_id"],)).fetchall()
+    return special_orders_
