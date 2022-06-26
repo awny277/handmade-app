@@ -22,21 +22,22 @@ connection = sqlite3.connect("database.db", check_same_thread=False)
 connection.row_factory = dict_factory
 cursor = connection.cursor()
 
-cursor.execute("""CREATE TABLE special_orders (
-        id INTEGER PRIMARY KEY,
-        user_id INTEGER,
-        title TEXT UNIQUE NOT NULL,
-        description TEXT NOT NULL,
-        required_skills TEXT NOT NULL,
-        est_delivery_time TEXT NOT NULL,
-        expected_budget TEXT,
-        category TEXT,
-        sub_category TEXT,
-        img_url TEXT
-    )""")
-connection.commit()
 
 try:
+    cursor.execute("""CREATE TABLE special_orders (
+            id INTEGER PRIMARY KEY,
+            user_id INTEGER,
+            title TEXT UNIQUE NOT NULL,
+            description TEXT NOT NULL,
+            required_skills TEXT NOT NULL,
+            est_delivery_time TEXT NOT NULL,
+            expected_budget TEXT,
+            category TEXT,
+            sub_category TEXT,
+            img_url TEXT
+        )""")
+    connection.commit()
+
     cursor.execute("""CREATE TABLE users (
         id INTEGER PRIMARY KEY,
         username TEXT UNIQUE NOT NULL,
@@ -383,9 +384,9 @@ def add_special_order():
         return "Failed."
 
     with connection:
-        cursor.execute("""INSERT INTO products(title, description, required_skills, est_delivery_time, expected_budget, category, sub_category, img_url)
-                        VALUES(?, ?, ?, ?, ?, ?, ?, ?) WHERE user_id = ?""",
-                        (title, description, required_skills, est_delivery_time, expected_budget, category, sub_category, img_url, session["user_id"]))
+        cursor.execute("""INSERT INTO special_orders(user_id, title, description, required_skills, est_delivery_time, expected_budget, category, sub_category, img_url)
+                        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                        (session["user_id"], title, description, required_skills, est_delivery_time, expected_budget, category, sub_category, img_url))
     
     return "Special order added."
 
