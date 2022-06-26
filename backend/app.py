@@ -22,8 +22,6 @@ connection = sqlite3.connect("database.db", check_same_thread=False)
 connection.row_factory = dict_factory
 cursor = connection.cursor()
 
-cursor.execute("DROP TABLE users")
-
 try:
     cursor.execute("""CREATE TABLE users (
         id INTEGER PRIMARY KEY,
@@ -306,24 +304,24 @@ def set_profile():
     with connection:
         if state and address_2:
             cursor.execute("""INSERT INTO users(firstname, lastname, phone_number, city, state, address_1, address_2)
-                            VALUES(:firstname, :lastname, :phone_number, :city, :state, :address_1, :address_2)""",
+                            VALUES(:firstname, :lastname, :phone_number, :city, :state, :address_1, :address_2) WHERE id = :id""",
                             {"firstname": firstname, "lastname": lastname, "phone_number": phone_number,
-                            "city": city, "state": state, "address_1": address_1, "address_2": address_2})
+                            "city": city, "state": state, "address_1": address_1, "address_2": address_2, "id": session["user_id"]})
         elif state and not address_2:
             cursor.execute("""INSERT INTO users(firstname, lastname, phone_number, city, state, address_1)
-                            VALUES(:firstname, :lastname, :phone_number, :city, :state, :address_1)""",
+                            VALUES(:firstname, :lastname, :phone_number, :city, :state, :address_1) WHERE id = :id""",
                             {"firstname": firstname, "lastname": lastname, "phone_number": phone_number,
-                            "city": city, "state": state, "address_1": address_1})
+                            "city": city, "state": state, "address_1": address_1, "id": session["user_id"]})
         elif not state and address_2:
             cursor.execute("""INSERT INTO users(firstname, lastname, phone_number, city, address_1, address_2)
-                            VALUES(:firstname, :lastname, :phone_number, :city, :address_1, :address_2)""",
+                            VALUES(:firstname, :lastname, :phone_number, :city, :address_1, :address_2) WHERE id = :id""",
                             {"firstname": firstname, "lastname": lastname, "phone_number": phone_number,
-                            "city": city, "address_1": address_1, "address_2": address_2})
+                            "city": city, "address_1": address_1, "address_2": address_2, "id": session["user_id"]})
         else:
             cursor.execute("""INSERT INTO users(firstname, lastname, phone_number, city, address_1)
-                            VALUES(:firstname, :lastname, :phone_number, :city, :address_1)""",
+                            VALUES(:firstname, :lastname, :phone_number, :city, :address_1) WHERE id = :id""",
                             {"firstname": firstname, "lastname": lastname, "phone_number": phone_number,
-                            "city": city, "address_1": address_1})
+                            "city": city, "address_1": address_1, "id": session["user_id"]})
     
     return "Profile updated."
 

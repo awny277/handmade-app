@@ -8,7 +8,7 @@ const UserRegister = () => {
   const [userInfo, setUserInfo] = useState([]);
   const [validateAccount, setValidateAccount] = useState([]);
   const navigate = useNavigate();
-  // http://127.0.0.1:5000/logout
+  //get  http://127.0.0.1:5000/logout
   const logoutHandeller = () => {
     window.localStorage.setItem("userName", "");
     window.localStorage.setItem("password", "");
@@ -173,69 +173,80 @@ const UserRegister = () => {
       inputLabel: "Your email address",
       inputPlaceholder: "Enter your email address",
     });
-    const loginValidate = userInfo.find((ele) => {
-      return ele.email.toLowerCase() === email.toLowerCase();
-    });
-    setValidateAccount(loginValidate);
+    // const loginValidate = userInfo.find((ele) => {
+    //   return ele.email.toLowerCase() === email.toLowerCase();
+    // });
+    // setValidateAccount(loginValidate);
     if (email) {
-      if (loginValidate || window.localStorage.getItem("email") === email) {
-        const { value: password } = await Swal.fire({
-          // allowOutsideClick: false,
-          title: "Login",
-          input: "password",
-          inputLabel: "Password",
-          inputPlaceholder: "Enter your password",
-          inputAttributes: {
-            maxlength: 10,
-            autocapitalize: "off",
-            autocorrect: "off",
-          },
-        });
-        if (password) {
-          // If Password or email Rong return Reister
-          if (loginValidate.password.toLowerCase() === password.toLowerCase()) {
-            const obj = {
-              userName: loginValidate.userName,
-              email: loginValidate.email,
-              password: loginValidate.password,
-            };
-            axios
-              .put(
-                "https://6259ff6a43fda1299a146d28.mockapi.io/users/" +
-                  loginValidate.id,
-                { ...obj }
-              )
-              .then((res) => {
-                window.localStorage.setItem("userID", res.data.id);
-                window.localStorage.setItem("isOline", "true");
-                window.location.reload(false);
-              })
-              .catch((err) => console.log(err));
-            navigate("/");
-            // OfferHandler();
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: "Emaill or Password is Wrong",
-              footer: `<button class="Forget btn" >Forget Password</button>`,
-            });
-            document.querySelector(".Forget").onclick = () => {
-              HandelForgetPassword();
-            };
-          }
-        }
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Emaill or Password is Wrong",
-          footer: `<button class="Forget btn" >Forget Password</button>`,
-        });
-        document.querySelector(".Forget").onclick = () => {
-          HandelForgetPassword();
-        };
+      // if (loginValidate || window.localStorage.getItem("email") === email) {
+      const { value: password } = await Swal.fire({
+        // allowOutsideClick: false,
+        title: "Login",
+        input: "password",
+        inputLabel: "Password",
+        inputPlaceholder: "Enter your password",
+        inputAttributes: {
+          maxlength: 10,
+          autocapitalize: "off",
+          autocorrect: "off",
+        },
+      });
+      if (password) {
+        axios
+          .post("http://127.0.0.1:5000/login", {
+            email,
+            password,
+          })
+          .then((res) => {
+            window.localStorage.setItem("userID", res.data.id);
+            window.localStorage.setItem("isOline", "true");
+            // window.location.reload(false);
+          });
       }
+      // If Password or email Rong return Reister
+      //     if (loginValidate.password.toLowerCase() === password.toLowerCase()) {
+      //       const obj = {
+      //         userName: loginValidate.userName,
+      //         email: loginValidate.email,
+      //         password: loginValidate.password,
+      //       };
+      //       axios
+      //         .put(
+      //           "https://6259ff6a43fda1299a146d28.mockapi.io/users/" +
+      //             loginValidate.id,
+      //           { ...obj }
+      //         )
+      // .then((res) => {
+      //   window.localStorage.setItem("userID", res.data.id);
+      //   window.localStorage.setItem("isOline", "true");
+      //   window.location.reload(false);
+      // })
+      //         .catch((err) => console.log(err));
+      //       navigate("/");
+      //       // OfferHandler();
+      //     } else {
+      //       Swal.fire({
+      //         icon: "error",
+      //         title: "Oops...",
+      //         text: "Emaill or Password is Wrong",
+      //         footer: `<button class="Forget btn" >Forget Password</button>`,
+      //       });
+      //       document.querySelector(".Forget").onclick = () => {
+      //         HandelForgetPassword();
+      //       };
+      //     }
+      //   }
+      // } else {
+      //   Swal.fire({
+      //     icon: "error",
+      //     title: "Oops...",
+      //     text: "Emaill or Password is Wrong",
+      //     footer: `<button class="Forget btn" >Forget Password</button>`,
+      //   });
+      //   document.querySelector(".Forget").onclick = () => {
+      //     HandelForgetPassword();
+      //   };
+      // }
     }
   };
 

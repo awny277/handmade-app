@@ -106,14 +106,21 @@ const ProductDetails = ({ addnewProject, userInfo, AddtoCart }) => {
     }
   };
 
+  //add_cart
   const AddToCartHandeller = () => {
-    const productCount = {
-      count: count,
-      inCart: true,
-    };
-    const SendResult = { ...result, ...productCount };
-    // const SendResult = { ...result };
-    AddtoCart(SendResult);
+    // const productCount = {
+    //   count: count,
+    //   inCart: true,
+    // };
+    // const SendResult = { ...result, ...productCount };
+    // // const SendResult = { ...result };
+    // AddtoCart(SendResult);
+    axios
+      .post("http://127.0.0.1:5000/add_cart", {
+        product_id: result.id,
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   };
   return (
     <div className="container main-sections">
@@ -177,7 +184,7 @@ const ProductDetails = ({ addnewProject, userInfo, AddtoCart }) => {
           </div>
         </div>
       </div>
-      <div className="review">
+      {/* <div className="review">
         <h2>Review</h2>
         <FloatingLabel controlId="floatingTextarea2" label="Review">
           <Form.Control
@@ -195,7 +202,7 @@ const ProductDetails = ({ addnewProject, userInfo, AddtoCart }) => {
         <button className="btn btn-outline-primary" onClick={ReviewSubmit}>
           send review
         </button>
-      </div>
+      </div> */}
       <hr />
       <h1 className="text-center">similler Products</h1>
       <Container>

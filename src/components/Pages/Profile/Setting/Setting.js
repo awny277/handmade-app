@@ -1,6 +1,7 @@
 import React from "react";
 import "./Setting.css";
 const Setting = ({ userInfo }) => {
+  // 
   return (
     <div className="main-header">
       <div className=" container-process">
