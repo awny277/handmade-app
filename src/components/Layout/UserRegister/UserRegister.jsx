@@ -19,7 +19,7 @@ const UserRegister = () => {
         window.localStorage.setItem("email", "");
         window.localStorage.setItem("userID", "");
         window.localStorage.setItem("isOline", "false");
-        window.location.reload(false);
+        // window.location.reload(false);
       });
   };
   // http://127.0.0.1:5000/register
@@ -202,10 +202,11 @@ const UserRegister = () => {
             email,
             password,
           })
+          .then((res) => res)
           .then((res) => {
             window.localStorage.setItem("userID", res.data.id);
             window.localStorage.setItem("isOline", "true");
-            // window.location.reload(false);
+            window.location.reload(false);
           });
       }
       // If Password or email Rong return Reister

@@ -73,25 +73,26 @@ const UserdashBoard = ({ sepialOrder, setSpecialOrder, userInfo }) => {
     } else {
       const data = {
         time: new Date(),
-        budget: budget,
-        delivarDays: delivarDays,
-        projectTitle: projectTitle,
-        projectDetails: projectDetails,
-        projectCategType: projectCategType,
-        skills: skills,
-        projectSubCategType: projectSubCategType,
-        // SelectImagePc: formData,
-        user: {
-          userName: userInfo.userName,
-          userAccount: userInfo.email,
-          userId: userInfo.id,
-        },
+        expected_budget: budget,
+        est_delivery_time: delivarDays,
+        title: projectTitle,
+        description: projectDetails,
+        category: projectCategType,
+        sub_category: projectSubCategType,
+        required_skills: skills,
+        img_url: SelectImage,
+        // user: {
+        //   userName: userInfo.userName,
+        //   userAccount: userInfo.email,
+        //   userId: userInfo.id,
+        // },
         // SelectImagePc: SelectImagePc,
       };
       axios
-        .post("https://6259ff6a43fda1299a146d28.mockapi.io/specialProdect", {
+        .post(" http://127.0.0.1:5000/add_special_order", {
           ...data,
         })
+        .then((res) => console.log(res))
         .then(ResetFields)
         .then((err) => console.log(err));
       // axios
