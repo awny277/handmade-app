@@ -1,4 +1,3 @@
-from os import stat
 import sqlite3
 from flask import Flask, request, session
 from flask_session import Session
@@ -277,7 +276,7 @@ def schema():
 @app.post("/set_profile")
 def set_profile():
     """Set or update user info"""
-    
+
     request_data = request.get_json()
 
     firstname = None
