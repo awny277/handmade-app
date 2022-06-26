@@ -22,6 +22,8 @@ connection = sqlite3.connect("database.db", check_same_thread=False)
 connection.row_factory = dict_factory
 cursor = connection.cursor()
 
+cursor.execute("DROP TABLE special_orders;")
+connection.commit()
 
 try:
     cursor.execute("""CREATE TABLE special_orders (
