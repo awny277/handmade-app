@@ -71,38 +71,20 @@ const UserdashBoard = ({ sepialOrder, setSpecialOrder, userInfo }) => {
         title: "All fields must be completed.",
       });
     } else {
-      const data = {
-        time: new Date(),
-        expected_budget: budget,
-        est_delivery_time: delivarDays,
-        title: projectTitle,
-        description: projectDetails,
-        category: projectCategType,
-        sub_category: projectSubCategType,
-        required_skills: skills,
-        img_url: SelectImage,
-        // user: {
-        //   userName: userInfo.userName,
-        //   userAccount: userInfo.email,
-        //   userId: userInfo.id,
-        // },
-        // SelectImagePc: SelectImagePc,
-      };
       axios
         .post(" http://127.0.0.1:5000/add_special_order", {
-          ...data,
+          expected_budget: budget,
+          est_delivery_time: delivarDays,
+          title: projectTitle,
+          description: projectDetails,
+          category: projectCategType,
+          sub_category: projectSubCategType,
+          required_skills: skills,
+          img_url: SelectImage,
         })
         .then((res) => console.log(res))
         .then(ResetFields)
         .then((err) => console.log(err));
-      // axios
-      //   .post("http://127.0.0.1:5000/", {
-      //     ...data,
-      //   })
-      //   .then(ResetFields)
-      //   .then((err) => console.log(err));
-      const updateData = [...sepialOrder, data];
-      setSpecialOrder(updateData);
     }
   };
 

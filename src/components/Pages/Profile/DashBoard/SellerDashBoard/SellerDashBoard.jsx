@@ -73,7 +73,6 @@ const SellerDashBoard = ({ sepialOrder, setSpecialOrder }) => {
         img_path: SelectImage,
       };
       // http://127.0.0.1:5000/add_product
-      // http://127.0.0.1:5000/add_special_order
       axios
         .post("http://127.0.0.1:5000/add_product", {
           ...data,

@@ -14,13 +14,13 @@ const UserRegister = () => {
       .get("http://127.0.0.1:5000/logout")
       .then((res) => console.log(res))
       .then(() => {
-        window.localStorage.setItem("userName", "");
         window.localStorage.setItem("password", "");
+        window.localStorage.setItem("userName", "");
         window.localStorage.setItem("email", "");
-        window.localStorage.setItem("userID", "");
         window.localStorage.setItem("isOline", "false");
         // window.location.reload(false);
       });
+    navigate("/");
   };
   // http://127.0.0.1:5000/register
   useEffect(() => {
@@ -94,80 +94,59 @@ const UserRegister = () => {
         inputPlaceholder: "Enter your email address",
       });
 
-      const accoundValidation = userInfo.find((ele) => {
-        return ele.email.toLowerCase() === email.toLowerCase();
-      });
-
       if (email) {
-        if (!accoundValidation) {
-          const { value: password } = await Swal.fire({
-            title: "Enter your password",
-            input: "password",
-            inputLabel: "Password",
-            inputPlaceholder: "Enter your password",
-            inputAttributes: {
-              maxlength: 10,
-              autocapitalize: "off",
-              autocorrect: "off",
+        const { value: password } = await Swal.fire({
+          title: "Enter your password",
+          input: "password",
+          inputLabel: "Password",
+          inputPlaceholder: "Enter your password",
+          inputAttributes: {
+            maxlength: 10,
+            autocapitalize: "off",
+            autocorrect: "off",
+          },
+        });
+        if (password) {
+          const { value: type } = await Swal.fire({
+            title: "Select field validation",
+            input: "select",
+            inputOptions: {
+              seller: "Seller",
+              user: "User",
+            },
+            inputPlaceholder: "Select Type",
+            showCancelButton: true,
+            inputValidator: (value) => {
+              return new Promise((resolve) => {
+                if (value !== "") {
+                  resolve();
+                } else {
+                  resolve("You need to select type :)");
+                }
+              });
             },
           });
-          if (password) {
-            const { value: type } = await Swal.fire({
-              title: "Select field validation",
-              input: "select",
-              inputOptions: {
-                seller: "Seller",
-                user: "User",
-              },
-              inputPlaceholder: "Select Type",
-              showCancelButton: true,
-              inputValidator: (value) => {
-                return new Promise((resolve) => {
-                  if (value !== "") {
-                    resolve();
-                  } else {
-                    resolve("You need to select type :)");
-                  }
-                });
-              },
-            });
-            if (type) {
-              axios
-                .post("http://127.0.0.1:5000/register", {
-                  email,
-                  password,
-                  username: userName,
-                  // userId: userId,
-                  type,
-                  // discount: true,
-                })
-                .then((res) => console.log(res))
-                .then((res) => {
-                  window.localStorage.setItem("userName", userName);
-                  window.localStorage.setItem("password", password);
-                  window.localStorage.setItem("email", email);
-                  window.localStorage.setItem("userID", res.data.id);
-                  window.localStorage.setItem("isOline", "true");
-                  window.location.reload(false);
-                })
-                .catch((err) => console.log(err));
-              navigate("/");
-            }
+          if (type) {
+            axios
+              .post("http://127.0.0.1:5000/register", {
+                email,
+                password,
+                username: userName,
+                type,
+              })
+              .then((res) => console.log(res))
+              .then(() => {
+                window.localStorage.setItem("userName", userName);
+                window.localStorage.setItem("email", email);
+                window.localStorage.setItem("isOline", "true");
+                window.location.reload(false);
+              })
+              .catch((err) => console.log(err));
+            navigate("/");
           }
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "This User is Signup Befor",
-            footer: `<button class="register btn" >register</button>`,
-          });
-          document.querySelector(".register").onclick = () => {
-            HandlerReister();
-          };
         }
       }
     }
-    // }
   };
 
   const Loginn = async (e) => {
@@ -178,12 +157,7 @@ const UserRegister = () => {
       inputLabel: "Your email address",
       inputPlaceholder: "Enter your email address",
     });
-    // const loginValidate = userInfo.find((ele) => {
-    //   return ele.email.toLowerCase() === email.toLowerCase();
-    // });
-    // setValidateAccount(loginValidate);
     if (email) {
-      // if (loginValidate || window.localStorage.getItem("email") === email) {
       const { value: password } = await Swal.fire({
         // allowOutsideClick: false,
         title: "Login",
@@ -202,57 +176,30 @@ const UserRegister = () => {
             email,
             password,
           })
-          .then((res) => res)
           .then((res) => {
-            window.localStorage.setItem("userID", res.data.id);
-            window.localStorage.setItem("isOline", "true");
-            window.location.reload(false);
+            console.log(res);
+            return res;
+          })
+          .then((res) => {
+            if (res.data.message === "Invalid email and/or password") {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Emaill or Password is Wrong",
+                footer: `<button class="Forget btn" >Sign up</button>`,
+              });
+              document.querySelector(".Forget").onclick = () => {
+                HandlerReister();
+              };
+            } else {
+              window.localStorage.setItem("userID", res.data.id);
+              window.localStorage.setItem("userName", res.data.username);
+              window.localStorage.setItem("email", res.data.email);
+              window.localStorage.setItem("isOline", "true");
+              // window.location.reload(false);
+            }
           });
       }
-      // If Password or email Rong return Reister
-      //     if (loginValidate.password.toLowerCase() === password.toLowerCase()) {
-      //       const obj = {
-      //         userName: loginValidate.userName,
-      //         email: loginValidate.email,
-      //         password: loginValidate.password,
-      //       };
-      //       axios
-      //         .put(
-      //           "https://6259ff6a43fda1299a146d28.mockapi.io/users/" +
-      //             loginValidate.id,
-      //           { ...obj }
-      //         )
-      // .then((res) => {
-      //   window.localStorage.setItem("userID", res.data.id);
-      //   window.localStorage.setItem("isOline", "true");
-      //   window.location.reload(false);
-      // })
-      //         .catch((err) => console.log(err));
-      //       navigate("/");
-      //       // OfferHandler();
-      //     } else {
-      //       Swal.fire({
-      //         icon: "error",
-      //         title: "Oops...",
-      //         text: "Emaill or Password is Wrong",
-      //         footer: `<button class="Forget btn" >Forget Password</button>`,
-      //       });
-      //       document.querySelector(".Forget").onclick = () => {
-      //         HandelForgetPassword();
-      //       };
-      //     }
-      //   }
-      // } else {
-      //   Swal.fire({
-      //     icon: "error",
-      //     title: "Oops...",
-      //     text: "Emaill or Password is Wrong",
-      //     footer: `<button class="Forget btn" >Forget Password</button>`,
-      //   });
-      //   document.querySelector(".Forget").onclick = () => {
-      //     HandelForgetPassword();
-      //   };
-      // }
     }
   };
 

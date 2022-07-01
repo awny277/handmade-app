@@ -14,7 +14,7 @@ const AdminControl = ({ userInfo }) => {
         <div className="AdminControlImage">
           <img src={AdminControlImage} alt="AdminControlImage" />
         </div>
-        <h3>{userInfo.userName}</h3>
+        <h3>{window.localStorage.getItem("userName")}</h3>
         <span>{userInfo.type}</span>
       </div>
       <ul>

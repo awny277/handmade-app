@@ -33,7 +33,6 @@ const ProductDetails = ({ addnewProject, userInfo, AddtoCart }) => {
         const product = res.data;
         setResult(product);
         setSimiller(simillerProducts);
-        // setCommetns(product.comments);
       });
     };
 
@@ -106,15 +105,7 @@ const ProductDetails = ({ addnewProject, userInfo, AddtoCart }) => {
     }
   };
 
-  //add_cart
   const AddToCartHandeller = () => {
-    // const productCount = {
-    //   count: count,
-    //   inCart: true,
-    // };
-    // const SendResult = { ...result, ...productCount };
-    // // const SendResult = { ...result };
-    // AddtoCart(SendResult);
     axios
       .post("http://127.0.0.1:5000/add_cart", {
         product_id: result.id,
@@ -184,25 +175,6 @@ const ProductDetails = ({ addnewProject, userInfo, AddtoCart }) => {
           </div>
         </div>
       </div>
-      {/* <div className="review">
-        <h2>Review</h2>
-        <FloatingLabel controlId="floatingTextarea2" label="Review">
-          <Form.Control
-            as="textarea"
-            placeholder="Leave Project Details here"
-            style={{ height: "250px" }}
-            value={review}
-            onChange={(e) => setReview(e.target.value)}
-          />
-          <Form.Text id="passwordHelpBlock" muted>
-            Enter a detailed description of your project and attach examples of
-            what you want if possible.
-          </Form.Text>
-        </FloatingLabel>
-        <button className="btn btn-outline-primary" onClick={ReviewSubmit}>
-          send review
-        </button>
-      </div> */}
       <hr />
       <h1 className="text-center">similler Products</h1>
       <Container>

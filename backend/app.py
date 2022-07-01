@@ -1,3 +1,4 @@
+from calendar import c
 import sqlite3
 from flask import Flask, request, session
 from flask_session import Session
@@ -22,34 +23,44 @@ connection = sqlite3.connect("database.db", check_same_thread=False)
 connection.row_factory = dict_factory
 cursor = connection.cursor()
 
-cursor.execute("""CREATE TABLE special_orders (
-        id INTEGER PRIMARY KEY,
-        user_id INTEGER,
-        title TEXT UNIQUE NOT NULL,
-        description TEXT NOT NULL,
-        required_skills TEXT NOT NULL,
-        est_delivery_time TEXT NOT NULL,
-        expected_budget TEXT,
-        category TEXT,
-        sub_category TEXT,
-        img_url TEXT
-    )""")
-connection.commit()
+# cursor.execute("""CREATE TABLE special_orders (
+#         id INTEGER PRIMARY KEY,
+#         user_id INTEGER,
+#         title TEXT UNIQUE NOT NULL,
+#         description TEXT NOT NULL,
+#         required_skills TEXT NOT NULL,
+#         est_delivery_time TEXT NOT NULL,
+#         expected_budget TEXT,
+#         category TEXT,
+#         sub_category TEXT,
+#         img_url TEXT
+#     )""")
+# connection.commit()
+
+# with connection:
+#     cursor.execute("DROP TABLE users_info")
+#     cursor.execute("DROP TABLE users")
 
 try:
-    cursor.execute("""CREATE TABLE users (
-        id INTEGER PRIMARY KEY,
-        username TEXT UNIQUE NOT NULL,
-        email TEXT NOT NULL,
-        hash TEXT NOT NULL,
-        type TEXT NOT NULL,
+    cursor.execute("""CREATE TABLE users_info (
+        user_id INTEGER,
         firstname TEXT,
         lastname TEXT,
         phone_number TEXT,
         city TEXT,
         state TEXT,
         address_1 TEXT,
-        address_2 TEXT
+        address_2 TEXT,
+        FOREIGN KEY(user_id) REFERENCES users(id)
+    )""")
+    connection.commit()
+    
+    cursor.execute("""CREATE TABLE users (
+        id INTEGER PRIMARY KEY,
+        username TEXT UNIQUE NOT NULL,
+        email TEXT NOT NULL,
+        hash TEXT NOT NULL,
+        type TEXT NOT NULL
     )""")
     connection.commit()
 
@@ -267,13 +278,27 @@ def login():
     else:
         # Remember which user has logged in
         session["user_id"] = user["id"]
+        
+        session_contents = []
+        for key, value in session.items():
+            session_contents.append((key, value))
 
-        return {"message": "You logged in successfully!", "id": user["id"], "username": user["username"], "email": email}
+        return {"session": session_contents, "message": "You logged in successfully!", "id": user["id"], "username": user["username"], "email": email}
 
 @app.route("/logout")
 def logout():
     session.clear()
-    return "Logged out."
+    
+    session_contents = []
+    for key, value in session.items():
+        session_contents.append((key, value))
+    
+    return {"session": session_contents, "message": "Logged out."}
+
+@app.route("/user")
+def get_user():
+    cursor.execute("SELECT * FROM users_info WHERE user_id = ?", (session["user_id"],))
+    return cursor.fetchone()
 
 @app.route("/users")
 def users():
@@ -313,29 +338,31 @@ def set_profile():
         if "address_1" in request_data:
             address_1 = request_data["address_1"]
         if "address_2" in request_data:
-            address_2 = request_data["address_2"]
+            address_2 = request_data["address_2"]    
     
     with connection:
+        cursor.execute("DELETE FROM users_info WHERE user_id = ?", (session["user_id"],))
+        
         if state and address_2:
-            cursor.execute("""INSERT INTO users(firstname, lastname, phone_number, city, state, address_1, address_2)
-                            VALUES(:firstname, :lastname, :phone_number, :city, :state, :address_1, :address_2) WHERE id = :id""",
-                            {"firstname": firstname, "lastname": lastname, "phone_number": phone_number,
-                            "city": city, "state": state, "address_1": address_1, "address_2": address_2, "id": session["user_id"]})
+            cursor.execute("""INSERT INTO users_info(user_id, firstname, lastname, phone_number, city, state, address_1, address_2)
+                            VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :state, :address_1, :address_2)""",
+                            {"user_id": session["user_id"], "firstname": firstname, "lastname": lastname, "phone_number": phone_number,
+                            "city": city, "state": state, "address_1": address_1, "address_2": address_2})
         elif state and not address_2:
-            cursor.execute("""INSERT INTO users(firstname, lastname, phone_number, city, state, address_1)
-                            VALUES(:firstname, :lastname, :phone_number, :city, :state, :address_1) WHERE id = :id""",
-                            {"firstname": firstname, "lastname": lastname, "phone_number": phone_number,
-                            "city": city, "state": state, "address_1": address_1, "id": session["user_id"]})
+            cursor.execute("""INSERT INTO users(user_id, firstname, lastname, phone_number, city, state, address_1)
+                            VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :state, :address_1)""",
+                            {"user_id": session["user_id"], "firstname": firstname, "lastname": lastname, "phone_number": phone_number,
+                            "city": city, "state": state, "address_1": address_1})
         elif not state and address_2:
-            cursor.execute("""INSERT INTO users(firstname, lastname, phone_number, city, address_1, address_2)
-                            VALUES(:firstname, :lastname, :phone_number, :city, :address_1, :address_2) WHERE id = :id""",
-                            {"firstname": firstname, "lastname": lastname, "phone_number": phone_number,
-                            "city": city, "address_1": address_1, "address_2": address_2, "id": session["user_id"]})
+            cursor.execute("""INSERT INTO users(user_id, firstname, lastname, phone_number, city, address_1, address_2)
+                            VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :address_1, :address_2)""",
+                            {"user_id": session["user_id"], "firstname": firstname, "lastname": lastname, "phone_number": phone_number,
+                            "city": city, "address_1": address_1, "address_2": address_2})
         else:
-            cursor.execute("""INSERT INTO users(firstname, lastname, phone_number, city, address_1)
-                            VALUES(:firstname, :lastname, :phone_number, :city, :address_1) WHERE id = :id""",
-                            {"firstname": firstname, "lastname": lastname, "phone_number": phone_number,
-                            "city": city, "address_1": address_1, "id": session["user_id"]})
+            cursor.execute("""INSERT INTO users(user_id, firstname, lastname, phone_number, city, address_1)
+                            VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :address_1)""",
+                            {"user_id": session["user_id"], "firstname": firstname, "lastname": lastname, "phone_number": phone_number,
+                            "city": city, "address_1": address_1})
     
     return "Profile updated."
 
@@ -383,9 +410,9 @@ def add_special_order():
         return "Failed."
 
     with connection:
-        cursor.execute("""INSERT INTO products(title, description, required_skills, est_delivery_time, expected_budget, category, sub_category, img_url)
-                        VALUES(?, ?, ?, ?, ?, ?, ?, ?) WHERE user_id = ?""",
-                        (title, description, required_skills, est_delivery_time, expected_budget, category, sub_category, img_url, session["user_id"]))
+        cursor.execute("""INSERT INTO special_orders(user_id, title, description, required_skills, est_delivery_time, expected_budget, category, sub_category, img_url)
+                        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                        (session["user_id"], title, description, required_skills, est_delivery_time, expected_budget, category, sub_category, img_url))
     
     return "Special order added."
 

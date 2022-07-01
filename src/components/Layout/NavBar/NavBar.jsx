@@ -52,7 +52,7 @@ const NavBar = ({ userInfo }) => {
                     navigate(`/profile/dashBoard`);
                   }}
                 >
-                  {userInfo.userName}
+                  Profile
                 </Dropdown.Item>
                 <Dropdown.Divider />
                 <UserRegister />
