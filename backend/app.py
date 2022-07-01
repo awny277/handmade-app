@@ -6,11 +6,11 @@ from flask_cors import CORS, cross_origin
 from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
-CORS(app)
 
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
+CORS(app)
 
 # Convert return value of cursor.fetchall() to a dictionary
 def dict_factory(cursor, row):
@@ -383,7 +383,9 @@ def set_profile():
                             {"user_id": session["user_id"], "firstname": firstname, "lastname": lastname, "phone_number": phone_number,
                             "city": city, "address_1": address_1})
     
-    return "Profile updated."
+    response = []
+    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+    return response
 
 @app.route("/profile")
 @cross_origin(supports_credentials=True)

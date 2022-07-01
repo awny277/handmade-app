@@ -18,7 +18,7 @@ const UserRegister = () => {
         window.localStorage.setItem("userName", "");
         window.localStorage.setItem("email", "");
         window.localStorage.setItem("isOline", "false");
-        // window.location.reload(false);
+        window.location.reload(false);
       });
     navigate("/");
   };
@@ -196,7 +196,7 @@ const UserRegister = () => {
               window.localStorage.setItem("userName", res.data.username);
               window.localStorage.setItem("email", res.data.email);
               window.localStorage.setItem("isOline", "true");
-              // window.location.reload(false);
+              window.location.reload(false);
             }
           });
       }

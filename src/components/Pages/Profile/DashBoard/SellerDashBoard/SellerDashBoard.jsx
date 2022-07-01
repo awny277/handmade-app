@@ -152,20 +152,21 @@ const SellerDashBoard = ({ sepialOrder, setSpecialOrder }) => {
                     }
                     value={projectCategType}
                   >
-                    <option value="Clothes">clothes</option>
-                    <option value="Home">home</option>
-                    <option value="Wax products">wax products</option>
-                    <option value="Wood Work">wood work</option>
-                    <option value="Metal Works">metal works</option>
-                    <option value="Pottery">Pottery</option>
-                    <option value="Carpets">Carpets</option>
+                    <option value="Baskets">baskets</option>
+                    <option value="Mats Rugs">mats-rugs</option>
+                    <option value="Cushions">cushions</option>
+                    <option value="Banquettes Ottomans Pouffes">
+                      banquettes-ottomans-pouffes
+                    </option>
+                    <option value="Chairs">chairs</option>
+                    <option value="Bags Clutches">bags-clutches</option>
                     {/* Carpets and kilims */}
                   </Form.Select>
                   <Form.Text id="passwordHelpBlock" muted>
                     Select the type or material you want .
                   </Form.Text>
                 </FloatingLabel>
-                {projectCategType === "Clothes" && (
+                {/* {projectCategType === "Clothes" && (
                   <FloatingLabel
                     controlId="floatingSelect"
                     label="Select Sub Category Type"
@@ -206,7 +207,7 @@ const SellerDashBoard = ({ sepialOrder, setSpecialOrder }) => {
                       Select the subtype or material you want .
                     </Form.Text>
                   </FloatingLabel>
-                )}
+                )} */}
                 <FloatingLabel controlId="floatingInput" label="Image Url ">
                   <Form.Control
                     type="text"
