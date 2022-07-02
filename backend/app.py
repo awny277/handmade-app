@@ -2,7 +2,7 @@ from calendar import c
 import sqlite3
 from flask import Flask, request, session
 from flask_session import Session
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
@@ -110,22 +110,26 @@ def get_product(product_id):
     return product
 
 @app.route("/")
+@cross_origin(supports_credentials=True)
 def index():
     return "Hello, World!"
 
 @app.route("/products")
+@cross_origin(supports_credentials=True)
 def products():
     """Send products list to client"""
     products_ = get_products()
     return products_
 
 @app.route("/product/<int:product_id>")
+@cross_origin(supports_credentials=True)
 def product(product_id):
     """Send a single product details to client"""
     product_ = get_product(product_id)
     return product_
 
 @app.post("/add_product")
+@cross_origin(supports_credentials=True)
 def add_product():
     request_data = request.get_json()
 
@@ -157,6 +161,7 @@ def add_product():
     return "Product added."
 
 @app.post("/add_cart")
+@cross_origin(supports_credentials=True)
 def add_cart():
     request_data = request.get_json()
     
@@ -175,12 +180,14 @@ def add_cart():
     return "Added to cart!"
 
 @app.route("/get_cart")
+@cross_origin(supports_credentials=True)
 def get_cart():
     products = cursor.execute("""SELECT * FROM products WHERE id IN
                                  (SELECT product_id FROM carts WHERE user_id = ?)""", (session["user_id"],)).fetchall()
     return str(products)
 
 @app.post("/order")
+@cross_origin(supports_credentials=True)
 def order():
     with connection:
         cursor.execute("INSERT INTO orders(user_id) VALUES(?)", (session["user_id"],))
@@ -206,6 +213,7 @@ def order():
 
 
 @app.post("/register")
+@cross_origin(supports_credentials=True)
 def register():
     """Register user"""
 
@@ -242,7 +250,13 @@ def register():
 
         return "Registration successful!"
 
+@app.route("/session")
+@cross_origin(supports_credentials=True)
+def current():
+    print(session.keys(), session.values) # Empty !
+
 @app.post("/login")
+@cross_origin(supports_credentials=True)
 def login():
     """Log user in"""
 
@@ -286,6 +300,7 @@ def login():
         return {"session": session_contents, "message": "You logged in successfully!", "id": user["id"], "username": user["username"], "email": email}
 
 @app.route("/logout")
+@cross_origin(supports_credentials=True)
 def logout():
     session.clear()
     
@@ -296,21 +311,25 @@ def logout():
     return {"session": session_contents, "message": "Logged out."}
 
 @app.route("/user")
+@cross_origin(supports_credentials=True)
 def get_user():
     cursor.execute("SELECT * FROM users_info WHERE user_id = ?", (session["user_id"],))
     return cursor.fetchone()
 
 @app.route("/users")
+@cross_origin(supports_credentials=True)
 def users():
     users = cursor.execute("SELECT * FROM users").fetchall()
     return str(users)
 
 @app.route("/schema")
+@cross_origin(supports_credentials=True)
 def schema():
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
     return str(cursor.fetchall())
 
 @app.post("/set_profile")
+@cross_origin(supports_credentials=True)
 def set_profile():
     """Set or update user info"""
 
@@ -367,6 +386,7 @@ def set_profile():
     return "Profile updated."
 
 @app.route("/profile")
+@cross_origin(supports_credentials=True)
 def profile():
     """Send user info back to the client"""
 
@@ -375,6 +395,7 @@ def profile():
     return user_info
 
 @app.post("/add_special_order")
+@cross_origin(supports_credentials=True)
 def add_special_order():
     request_data = request.get_json()
 
@@ -417,6 +438,7 @@ def add_special_order():
     return "Special order added."
 
 @app.route("/special_orders")
+@cross_origin(supports_credentials=True)
 def special_orders():
     special_orders_ = cursor.execute("SELECT * FROM special_orders WHERE user_id = ?", (session["user_id"],)).fetchall()
     return special_orders_
