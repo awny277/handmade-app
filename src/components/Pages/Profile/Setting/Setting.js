@@ -39,28 +39,16 @@ const Setting = ({ userInfo }) => {
         title: "All fields must be completed.",
       });
     } else {
-      fetch("http://127.0.0.1:5000/set_profile", {
-        mode: "cors",
-        credentials: "include",
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstname,
-          lastname,
-          phone_number,
-          city,
-          state,
-          address_1,
-          address_2,
-        }),
-      })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
-      // axios
-      //   .post("http://127.0.0.1:5000/set_profile", {
+      // fetch("http://127.0.0.1:5000/set_profile", {
+      //   mode: "cors",
+
+      //   method: "POST",
+      //   headers: {
+      //     Accept: "application/json",
+      //     "Content-Type": "application/json",
+      //   },
+
+      //   body: JSON.stringify({
       //     firstname,
       //     lastname,
       //     phone_number,
@@ -68,9 +56,23 @@ const Setting = ({ userInfo }) => {
       //     state,
       //     address_1,
       //     address_2,
-      //   })
+      //   }),
+      //   credentials: "include",
+      // })
       //   .then((res) => console.log(res))
       //   .catch((err) => console.log(err));
+      axios
+        .post("http://127.0.0.1:5000/set_profile", {
+          firstname,
+          lastname,
+          phone_number,
+          city,
+          state,
+          address_1,
+          address_2,
+        })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
     }
   };
   return (

@@ -8,18 +8,15 @@ const SellerDashBoard = ({ sepialOrder, setSpecialOrder }) => {
   const [budget, setBudegt] = useState("");
   const [projectDetails, setProjectDetails] = useState("");
   const [projectCategType, setProjectCategType] = useState("Clothes");
-  const [projectSubCategType, setProjectSubCategType] = useState("");
-  // const [selectedImage, setSelectedImage] = useState(null);
   const [SelectImage, setSelectImage] = useState(
     "https://cdn.shopify.com/s/files/1/0108/3038/1113/products/product35_720x.jpg?v=1532677866"
   );
-  // console.log(SelectImage);
+
   const ResetFields = () => {
     setProjectTitle("");
     setBudegt("");
     setProjectDetails("");
     setProjectCategType("Clothes");
-    setProjectSubCategType("");
     window.location.reload(false);
   };
 
@@ -64,21 +61,18 @@ const SellerDashBoard = ({ sepialOrder, setSpecialOrder }) => {
       });
     } else {
       const data = {
-        // id: new Date(),
         price: budget,
         title: projectTitle,
         description: projectDetails,
         category: projectCategType,
-        // projectSubCategType: projectSubCategType,
         img_path: SelectImage,
       };
-      // http://127.0.0.1:5000/add_product
       axios
         .post("http://127.0.0.1:5000/add_product", {
           ...data,
         })
         .then((res) => console.log(res))
-        // .then(ResetFields)
+        .then(ResetFields)
         .catch((err) => console.log(err));
       const updateData = [...sepialOrder, data];
       setSpecialOrder(updateData);

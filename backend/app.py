@@ -1,15 +1,15 @@
-from calendar import c
 import sqlite3
 from flask import Flask, request, session
-from flask_session import Session
+# from flask_session import Session
 from flask_cors import CORS, cross_origin
 from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
 
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
+app.config['SECRET_KEY'] = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+# app.config["SESSION_PERMANENT"] = False
+# app.config["SESSION_TYPE"] = "filesystem"
+# Session(app)
 CORS(app)
 
 # Convert return value of cursor.fetchall() to a dictionary
@@ -23,25 +23,17 @@ connection = sqlite3.connect("database.db", check_same_thread=False)
 connection.row_factory = dict_factory
 cursor = connection.cursor()
 
-# cursor.execute("""CREATE TABLE special_orders (
-#         id INTEGER PRIMARY KEY,
-#         user_id INTEGER,
-#         title TEXT UNIQUE NOT NULL,
-#         description TEXT NOT NULL,
-#         required_skills TEXT NOT NULL,
-#         est_delivery_time TEXT NOT NULL,
-#         expected_budget TEXT,
-#         category TEXT,
-#         sub_category TEXT,
-#         img_url TEXT
-#     )""")
-# connection.commit()
-
-# with connection:
-#     cursor.execute("DROP TABLE users_info")
-#     cursor.execute("DROP TABLE users")
 
 try:
+    cursor.execute("""CREATE TABLE users (
+        id INTEGER PRIMARY KEY,
+        username TEXT UNIQUE NOT NULL,
+        email TEXT NOT NULL,
+        hash TEXT NOT NULL,
+        type TEXT NOT NULL
+    )""")
+    connection.commit()
+    
     cursor.execute("""CREATE TABLE users_info (
         user_id INTEGER,
         firstname TEXT,
@@ -52,15 +44,6 @@ try:
         address_1 TEXT,
         address_2 TEXT,
         FOREIGN KEY(user_id) REFERENCES users(id)
-    )""")
-    connection.commit()
-    
-    cursor.execute("""CREATE TABLE users (
-        id INTEGER PRIMARY KEY,
-        username TEXT UNIQUE NOT NULL,
-        email TEXT NOT NULL,
-        hash TEXT NOT NULL,
-        type TEXT NOT NULL
     )""")
     connection.commit()
 
@@ -86,18 +69,26 @@ try:
         FOREIGN KEY(product_id) REFERENCES products(id)
     )""")
     connection.commit()
+    
+    cursor.execute("""CREATE TABLE special_orders (
+            id INTEGER PRIMARY KEY,
+            user_id INTEGER,
+            title TEXT UNIQUE NOT NULL,
+            description TEXT NOT NULL,
+            required_skills TEXT NOT NULL,
+            est_delivery_time TEXT NOT NULL,
+            expected_budget TEXT,
+            category TEXT,
+            sub_category TEXT,
+            img_url TEXT
+        )""")
+    connection.commit()
 except:
     pass
 
 
 def get_products():
-    """
-    Query the list of products and convert it to a dictionary
-    where the keys are each product's id and its value is the product
-
-    Returns:
-        dict - A dictionary with all the products that consists of "product_id: product" pairs
-    """
+    """Query all products from the database"""
     cursor.execute("SELECT * FROM products")
     rows = cursor.fetchall()
     rows_dict = {}
@@ -106,13 +97,14 @@ def get_products():
     return rows_dict
 
 def get_product(product_id):
+    """Query a product from the database by its id"""
     product = cursor.execute("SELECT * FROM products WHERE id = ?", (product_id,)).fetchone()
     return product
 
 @app.route("/")
 @cross_origin(supports_credentials=True)
 def index():
-    return "Hello, World!"
+    return "Hello, {}".format(session["user_id"])
 
 @app.route("/products")
 @cross_origin(supports_credentials=True)
@@ -183,7 +175,7 @@ def add_cart():
 @cross_origin(supports_credentials=True)
 def get_cart():
     products = cursor.execute("""SELECT * FROM products WHERE id IN
-                                 (SELECT product_id FROM carts WHERE user_id = ?)""", (session["user_id"],)).fetchall()
+                                (SELECT product_id FROM carts WHERE user_id = ?)""", (session["user_id"],)).fetchall()
     return str(products)
 
 @app.post("/order")
@@ -313,8 +305,8 @@ def logout():
 @app.route("/user")
 @cross_origin(supports_credentials=True)
 def get_user():
-    cursor.execute("SELECT * FROM users_info WHERE user_id = ?", (session["user_id"],))
-    return cursor.fetchone()
+    cursor.execute("SELECT * FROM users WHERE id = ?", (session["user_id"],))
+    return str(cursor.fetchall())
 
 @app.route("/users")
 @cross_origin(supports_credentials=True)
@@ -360,7 +352,7 @@ def set_profile():
             address_2 = request_data["address_2"]    
     
     with connection:
-        cursor.execute("DELETE FROM users_info WHERE user_id = ?", (session["user_id"],))
+        # cursor.execute("DELETE FROM users_info WHERE user_id = ?", (session["user_id"],))
         
         if state and address_2:
             cursor.execute("""INSERT INTO users_info(user_id, firstname, lastname, phone_number, city, state, address_1, address_2)
@@ -383,9 +375,7 @@ def set_profile():
                             {"user_id": session["user_id"], "firstname": firstname, "lastname": lastname, "phone_number": phone_number,
                             "city": city, "address_1": address_1})
     
-    response = []
-    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
-    return response
+    return "Profile updated"
 
 @app.route("/profile")
 @cross_origin(supports_credentials=True)
@@ -444,3 +434,6 @@ def add_special_order():
 def special_orders():
     special_orders_ = cursor.execute("SELECT * FROM special_orders WHERE user_id = ?", (session["user_id"],)).fetchall()
     return special_orders_
+
+if __name__ == "__main__":
+    app.run()
