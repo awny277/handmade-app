@@ -326,10 +326,6 @@ def add_special_order():
         if "img_url" in request_data:
             img_url = request_data["img_url"]
 
-    if not title or not description or not required_skills or not expected_budget \
-            or not est_delivery_time or not category or not sub_category or not img_url:
-        return "Failed."
-
     with connection:
         cursor.execute("""INSERT INTO special_orders(user_id, title, description, required_skills, est_delivery_time, 
         expected_budget, category, sub_category, img_url) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)""", 
