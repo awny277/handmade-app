@@ -1,3 +1,4 @@
+import json
 from helpers import *
 from flask import Flask, request
 from flask_cors import CORS
@@ -80,8 +81,13 @@ def add_cart():
 @app.route("/get_cart")
 def get_cart():
     products_ = cursor.execute("""SELECT * FROM products WHERE id IN
+<<<<<<< HEAD
                                 (SELECT product_id FROM carts WHERE user_id = ?)""", (user_id,)).fetchall()
     return str(products_)
+=======
+                                 (SELECT product_id FROM carts WHERE user_id = ?)""", (user_id,)).fetchall()
+    return json.dumps(products_)
+>>>>>>> 236ccdf7ba6a53274e95fb69007eef63ff7b8493
 
 
 @app.post("/order")
@@ -333,7 +339,7 @@ def add_special_order():
 @app.route("/special_orders")
 def special_orders():
     special_orders_ = cursor.execute("SELECT * FROM special_orders WHERE user_id = ?", (user_id,)).fetchall()
-    return str(special_orders_)
+    return json.dumps(special_orders_)
 
 
 if __name__ == "__main__":

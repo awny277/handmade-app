@@ -7,7 +7,7 @@ const SellerDashBoard = ({ sepialOrder, setSpecialOrder }) => {
   const [projectTitle, setProjectTitle] = useState("");
   const [budget, setBudegt] = useState("");
   const [projectDetails, setProjectDetails] = useState("");
-  const [projectCategType, setProjectCategType] = useState("Clothes");
+  const [projectCategType, setProjectCategType] = useState("Baskets");
   const [SelectImage, setSelectImage] = useState(
     "https://cdn.shopify.com/s/files/1/0108/3038/1113/products/product35_720x.jpg?v=1532677866"
   );
