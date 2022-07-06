@@ -6,11 +6,6 @@ from werkzeug.security import check_password_hash, generate_password_hash
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
-# app.config['SECRET_KEY'] = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
-# app.config["SESSION_PERMANENT"] = False
-# app.config["SESSION_TYPE"] = "filesystem"
-# Session(app)
-
 user_id = 0
 
 @app.route("/")
@@ -326,9 +321,8 @@ def add_special_order():
         if "img_url" in request_data:
             img_url = request_data["img_url"]
 
-    if not title or not description or not required_skills or not expected_budget \
-            or not est_delivery_time or not category or not sub_category or not img_url:
-        return "Failed."
+    # if not title or not description or not required_skills or not expected_budget or not est_delivery_time or not category or not sub_category or not img_url:
+    #     return "Failed."
 
     with connection:
         cursor.execute("""INSERT INTO special_orders(user_id, title, description, required_skills, est_delivery_time, 
@@ -342,7 +336,7 @@ def add_special_order():
 @app.route("/special_orders")
 def special_orders():
     special_orders_ = cursor.execute("SELECT * FROM special_orders WHERE user_id = ?", (user_id,)).fetchall()
-    return special_orders_
+    return str(special_orders_)
 
 
 if __name__ == "__main__":
