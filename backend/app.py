@@ -97,12 +97,13 @@ def order():
     if not products_ids:
         return "Failed to place order"
 
-    for key, product_id in products_ids.items():
+    for product_id_dict in products_ids:
+        product_id = product_id_dict["product_id"]
         with connection:
             cursor.execute("INSERT INTO order_items VALUES(?, ?)", (order_id, product_id))
     
     with connection:
-        cursor.execute("DELETE * FROM carts WHERE user_id = ?", (user_id,))
+        cursor.execute("DELETE FROM carts WHERE user_id = ?", (user_id,))
 
     return "Order placed!"
 
