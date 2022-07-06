@@ -82,7 +82,6 @@ const SpecialProductPage = (props) => {
                     </div>
                     <span>budget: {ele.expected_budget}</span>
                     <span>DelivarDays: {ele.est_delivery_time}</span>
-                    {/* <span>{moment(ele.time).fromNow()}</span> */}
                     <p>Description: {ele.description}</p>
                     <button
                       className="btn"
