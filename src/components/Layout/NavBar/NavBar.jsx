@@ -13,7 +13,7 @@ import logo from "../../../image/logo.png";
 import { BsFillPersonLinesFill } from "react-icons/bs";
 import { FaOpencart } from "react-icons/fa";
 import "./NavBar.css";
-const NavBar = ({ userInfo }) => {
+const NavBar = ({ userInfo, TotalLenght }) => {
   const navigate = useNavigate();
 
   return (
@@ -40,7 +40,7 @@ const NavBar = ({ userInfo }) => {
             </NavLink>
             <NavLink to={"/cart"} className="nav-link cartLink">
               <FaOpencart className="cartIcon" />
-              <span>0</span>
+              <span>{TotalLenght}</span>
             </NavLink>
             {window.localStorage.getItem("isOline") === "true" ? (
               <DropdownButton

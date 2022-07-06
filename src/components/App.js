@@ -23,6 +23,8 @@ function App() {
   const [addnewProdcuts, setAddnewProdcuts] = useState([]);
   const [sepialOrder, setSpecialOrder] = useState([]);
   const [allProduct, setAllProduct] = useState([]);
+  const [TotalPrice, setTotalPrice] = useState(0);
+  const [TotalLenght, TotalLength] = useState(0);
   useEffect(() => {
     const getDate = async () => {
       axios.get("http://127.0.0.1:5000/products").then((res) => {
@@ -67,6 +69,8 @@ function App() {
     }
   }, [ID]);
 
+  // get Cart Items
+
   function ScrollToTop() {
     const { pathname } = useLocation();
     useEffect(() => {
@@ -89,7 +93,7 @@ function App() {
   };
   return (
     <React.Fragment>
-      <NavBar userInfo={userInfo} />
+      <NavBar userInfo={userInfo} TotalLenght={TotalLenght} />
       {/* <DarkMode /> */}
       <ScrollToTop />
       <Routes>
@@ -128,9 +132,17 @@ function App() {
         />
         <Route
           path="/cart"
-          element={<Cart userInfo={userInfo} CartProducts={CartProducts} />}
+          element={
+            <Cart
+              setTotalPrice={(e) => setTotalPrice(e)}
+              TotalLength={(e) => TotalLength(e)}
+            />
+          }
         />
-        <Route path="/cartProcess" element={<CartProcess />} />
+        <Route
+          path="/cartProcess"
+          element={<CartProcess TotalPrice={TotalPrice} />}
+        />
         <Route path="/profile" element={<Profile userInfo={userInfo} />}>
           <Route
             path="/profile/dashBoard"

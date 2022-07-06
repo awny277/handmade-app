@@ -81,13 +81,8 @@ def add_cart():
 @app.route("/get_cart")
 def get_cart():
     products_ = cursor.execute("""SELECT * FROM products WHERE id IN
-<<<<<<< HEAD
-                                (SELECT product_id FROM carts WHERE user_id = ?)""", (user_id,)).fetchall()
-    return str(products_)
-=======
                                  (SELECT product_id FROM carts WHERE user_id = ?)""", (user_id,)).fetchall()
     return json.dumps(products_)
->>>>>>> 236ccdf7ba6a53274e95fb69007eef63ff7b8493
 
 
 @app.post("/order")
