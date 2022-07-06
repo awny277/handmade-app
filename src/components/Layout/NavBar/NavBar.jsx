@@ -9,7 +9,7 @@ import {
 } from "react-bootstrap";
 import UserRegister from "./../../Layout/UserRegister/UserRegister";
 import { NavLink, useNavigate } from "react-router-dom";
-import logo from "../../../image/logo.png";
+import logo from "../../../image/logo1.png";
 import { BsFillPersonLinesFill } from "react-icons/bs";
 import { FaOpencart } from "react-icons/fa";
 import "./NavBar.css";
