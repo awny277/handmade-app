@@ -48,6 +48,7 @@ const CartProcess = ({ TotalPrice }) => {
         title: "All fields must be completed.",
       });
     } else {
+      //http://127.0.0.1:5000/order
       axios
         .post("http://127.0.0.1:5000/set_profile", {
           firstname,
@@ -63,6 +64,12 @@ const CartProcess = ({ TotalPrice }) => {
     }
   };
 
+  const ClearCart = () => {
+    axios.get("http://127.0.0.1:5000/order").then((res) => {
+      console.log(res);
+    });
+  };
+
   return (
     <div className="main-header">
       <div className="container container-process">
@@ -70,6 +77,7 @@ const CartProcess = ({ TotalPrice }) => {
         <div className="cart-process">
           <div className="cart-info">
             <h4>address</h4>
+            <button onClick={ClearCart}>clear</button>
             <div className="cart-inputs">
               <div className="input-01">
                 <input
