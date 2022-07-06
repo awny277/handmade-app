@@ -40,28 +40,6 @@ const Setting = ({ userInfo }) => {
         title: "All fields must be completed.",
       });
     } else {
-      // fetch("http://127.0.0.1:5000/set_profile", {
-      //   mode: "cors",
-
-      //   method: "POST",
-      //   headers: {
-      //     Accept: "application/json",
-      //     "Content-Type": "application/json",
-      //   },
-
-      //   body: JSON.stringify({
-      //     firstname,
-      //     lastname,
-      //     phone_number,
-      //     city,
-      //     state,
-      //     address_1,
-      //     address_2,
-      //   }),
-      //   credentials: "include",
-      // })
-      //   .then((res) => console.log(res))
-      //   .catch((err) => console.log(err));
       axios
         .post("http://127.0.0.1:5000/set_profile", {
           firstname,
@@ -154,23 +132,6 @@ const Setting = ({ userInfo }) => {
                   onChange={(e) => setAddress_2(e.target.value)}
                 />
               </div>
-
-              {/* <div className="input-04">
-                <input
-                  type="text"
-                  name=""
-                  id=""
-                  placeholder="Address Line2: Apartment,Suite,Unit Building , Floor , Etc(optinal)"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div> */}
-
-              {/* <div className="input-05">
-                <input type="checkbox" name="" id="checked" />
-                <label htmlFor="checked"> Make Default</label>
-              </div> */}
-
               <button onClick={SettingHandeller}>Save</button>
             </div>
           </div>
