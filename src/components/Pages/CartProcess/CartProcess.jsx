@@ -74,7 +74,10 @@ const CartProcess = ({ TotalPrice }) => {
               <div className="address-details">
                 <h4>Main address</h4>
                 <p>addesss in details like 104ST line 4 debartment 04</p>
+                <div className="phone">
                 <span>Phone number </span>
+                <button>Save</button>
+                </div>
               </div>
               <button>Update</button>
             </div>

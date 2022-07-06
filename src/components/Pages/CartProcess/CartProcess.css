@@ -16,6 +16,21 @@
     font-size: 25px;
 }
 
+.phone  {
+    display: flex;
+    justify-content: space-between;
+}
+
+ .phone button {
+    width: 40%;
+    background-color: white;
+    margin: 0 !important;
+    padding: 7px;
+    border: 1px solid #E2803D;
+    border-radius: 30px;
+    font-size: 25px;
+ }
+
 
 .container-process {
     margin-top: 30px;
