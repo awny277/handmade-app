@@ -103,7 +103,7 @@ def order():
             cursor.execute("INSERT INTO order_items VALUES(?, ?)", (order_id, product_id))
     
     with connection:
-        cursor.execute("DELETE * FROM carts WHERE user_id = ?", (user_id,))
+        cursor.execute("DELETE FROM carts WHERE user_id = ?", (user_id,))
 
     return "Order placed!"
 
