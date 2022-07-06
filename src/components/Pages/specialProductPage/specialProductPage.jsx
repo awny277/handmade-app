@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
-import { Col, Container, Row, FloatingLabel, Form } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import HeaderImage from "../../../image/slide2.jpg";
 import { useNavigate } from "react-router-dom";
 import { IoIosAdd } from "react-icons/io";
