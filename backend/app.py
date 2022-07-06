@@ -1,20 +1,21 @@
 from helpers import *
-from flask import Flask, request, session
-# from flask.ext.session import Session
+from flask import Flask, request
 from flask_cors import CORS
 from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
-app.config['SECRET_KEY'] = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
+# app.config['SECRET_KEY'] = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+# app.config["SESSION_PERMANENT"] = False
+# app.config["SESSION_TYPE"] = "filesystem"
 # Session(app)
+
+user_id = 0
 
 @app.route("/")
 def index():
-    return "Hello, {}".format(session["user_id"])
+    return "Hello, World!"
 
 @app.route("/products")
 def products():
@@ -76,7 +77,7 @@ def add_cart():
         return "Failed to add item to cart."
 
     with connection:
-        cursor.execute("INSERT INTO carts VALUES(?, ?)", (session["user_id"], product_id))
+        cursor.execute("INSERT INTO carts VALUES(?, ?)", (user_id, product_id))
 
     return "Added to cart!"
 
@@ -84,16 +85,16 @@ def add_cart():
 @app.route("/get_cart")
 def get_cart():
     products_ = cursor.execute("""SELECT * FROM products WHERE id IN
-                                 (SELECT product_id FROM carts WHERE user_id = ?)""", (session["user_id"],)).fetchall()
+                                 (SELECT product_id FROM carts WHERE user_id = ?)""", (user_id,)).fetchall()
     return str(products_)
 
 
 @app.post("/order")
 def order():
     with connection:
-        cursor.execute("INSERT INTO orders(user_id) VALUES(?)", (session["user_id"],))
+        cursor.execute("INSERT INTO orders(user_id) VALUES(?)", (user_id,))
 
-    order_id = cursor.execute("SELECT id FROM orders WHERE user_id = ?", (session["user_id"],)).fetchall()[-1]["id"]
+    order_id = cursor.execute("SELECT id FROM orders WHERE user_id = ?", (user_id,)).fetchall()[-1]["id"]
 
     request_data = request.get_json()
 
@@ -145,9 +146,9 @@ def register():
         with connection:
             cursor.execute("INSERT INTO users(username, email, hash, type) values(?, ?, ?, ?)",
                            (username, email, generate_password_hash(password), type_))
-
-        # Log the user in and remember him
-        session["user_id"] = cursor.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()["id"]
+        
+        global user_id
+        user_id = cursor.execute("SELECT id FROM users WHERE username = ?", (username,)).fetchone()["id"]
 
         return "Registration successful!"
 
@@ -157,7 +158,8 @@ def login():
     """Log user in"""
 
     # Forget any user_id
-    session.clear()
+    global user_id
+    user_id = 0
     request_data = request.get_json()
 
     # User reached route via POST (as by submitting a form via POST)
@@ -185,24 +187,29 @@ def login():
     if not user or not check_password_hash(user["hash"], password):
         return "Invalid email and/or password"
 
-    else:
-        # Remember which user has logged in
-        session["user_id"] = user["id"]
+    user_id = user["id"]
 
-        return {"message": "You logged in successfully!", "id": user["id"],
-                "username": user["username"], "email": email, "type": user["type"]}
+    return {"message": "You logged in successfully!", "id": user["id"],
+            "username": user["username"], "email": email, "type": user["type"]}
 
 
 @app.route("/logout")
 def logout():
-    session.clear()
+    global user_id
+    user_id = 0
     return "Logged out"
 
 
 @app.route("/user")
-def get_user():
-    cursor.execute("SELECT * FROM users WHERE id = ?", (session["user_id"],))
-    return str(cursor.fetchone())
+def user():
+    user_ = cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
+    return str(user_)
+
+
+@app.route("/user_info")
+def user_info():
+    user_info_ = cursor.execute("SELECT * FROM users_info WHERE user_id = ?", (user_id,)).fetchone()
+    return str(user_info_)
 
 
 @app.route("/users")
@@ -248,32 +255,31 @@ def set_profile():
             address_2 = request_data["address_2"]
 
     with connection:
-        # cursor.execute("DELETE FROM users_info WHERE user_id = ?", (session["user_id"],))
-        uid = session["user_id"]
-        
+        cursor.execute("DELETE FROM users_info WHERE user_id = ?", (user_id,))
+
         if state and address_2:
             cursor.execute("""INSERT INTO users_info(user_id, firstname, lastname, phone_number, city, state, 
             address_1, address_2) VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :state, :address_1, 
             :address_2)""",
-                           {"user_id": uid, "firstname": firstname, "lastname": lastname,
+                           {"user_id": user_id, "firstname": firstname, "lastname": lastname,
                             "phone_number": phone_number,
                             "city": city, "state": state, "address_1": address_1, "address_2": address_2})
         elif state and not address_2:
             cursor.execute("""INSERT INTO users(user_id, firstname, lastname, phone_number, city, state, address_1)
                             VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :state, :address_1)""",
-                           {"user_id": uid, "firstname": firstname, "lastname": lastname,
+                           {"user_id": user_id, "firstname": firstname, "lastname": lastname,
                             "phone_number": phone_number,
                             "city": city, "state": state, "address_1": address_1})
         elif not state and address_2:
             cursor.execute("""INSERT INTO users(user_id, firstname, lastname, phone_number, city, address_1, address_2)
                             VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :address_1, :address_2)""",
-                           {"user_id": uid, "firstname": firstname, "lastname": lastname,
+                           {"user_id": user_id, "firstname": firstname, "lastname": lastname,
                             "phone_number": phone_number,
                             "city": city, "address_1": address_1, "address_2": address_2})
         else:
             cursor.execute("""INSERT INTO users(user_id, firstname, lastname, phone_number, city, address_1)
                             VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :address_1)""",
-                           {"user_id": uid, "firstname": firstname, "lastname": lastname,
+                           {"user_id": user_id, "firstname": firstname, "lastname": lastname,
                             "phone_number": phone_number,
                             "city": city, "address_1": address_1})
 
@@ -285,7 +291,7 @@ def profile():
     """Send user info back to the client"""
 
     user_info = cursor.execute("""SELECT firstname, lastname, phone_number, city, state, address_1, address_2
-                    FROM users WHERE id = ?""", (session["user_id"],)).fetchone()
+                    FROM users WHERE id = ?""", (user_id,)).fetchone()
     return user_info
 
 
@@ -327,7 +333,7 @@ def add_special_order():
     with connection:
         cursor.execute("""INSERT INTO special_orders(user_id, title, description, required_skills, est_delivery_time, 
         expected_budget, category, sub_category, img_url) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)""", 
-                       (session["user_id"], title, description, required_skills, est_delivery_time, expected_budget,
+                       (user_id, title, description, required_skills, est_delivery_time, expected_budget,
                         category, sub_category, img_url))
 
     return "Special order added."
@@ -335,7 +341,7 @@ def add_special_order():
 
 @app.route("/special_orders")
 def special_orders():
-    special_orders_ = cursor.execute("SELECT * FROM special_orders WHERE user_id = ?", (session["user_id"],)).fetchall()
+    special_orders_ = cursor.execute("SELECT * FROM special_orders WHERE user_id = ?", (user_id,)).fetchall()
     return special_orders_
 
 
