@@ -8,8 +8,8 @@ app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
 app.config['SECRET_KEY'] = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
-# app.config["SESSION_PERMANENT"] = False
-# app.config["SESSION_TYPE"] = "filesystem"
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
 # Session(app)
 
 @app.route("/")
@@ -201,7 +201,7 @@ def logout():
 
 @app.route("/user")
 def get_user():
-    cursor.execute("SELECT * FROM users_info WHERE user_id = ?", (session["user_id"],))
+    cursor.execute("SELECT * FROM users WHERE id = ?", (session["user_id"],))
     return str(cursor.fetchone())
 
 
@@ -249,30 +249,31 @@ def set_profile():
 
     with connection:
         # cursor.execute("DELETE FROM users_info WHERE user_id = ?", (session["user_id"],))
+        uid = session["user_id"]
         
         if state and address_2:
             cursor.execute("""INSERT INTO users_info(user_id, firstname, lastname, phone_number, city, state, 
             address_1, address_2) VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :state, :address_1, 
             :address_2)""",
-                           {"user_id": session["user_id"], "firstname": firstname, "lastname": lastname,
+                           {"user_id": uid, "firstname": firstname, "lastname": lastname,
                             "phone_number": phone_number,
                             "city": city, "state": state, "address_1": address_1, "address_2": address_2})
         elif state and not address_2:
             cursor.execute("""INSERT INTO users(user_id, firstname, lastname, phone_number, city, state, address_1)
                             VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :state, :address_1)""",
-                           {"user_id": session["user_id"], "firstname": firstname, "lastname": lastname,
+                           {"user_id": uid, "firstname": firstname, "lastname": lastname,
                             "phone_number": phone_number,
                             "city": city, "state": state, "address_1": address_1})
         elif not state and address_2:
             cursor.execute("""INSERT INTO users(user_id, firstname, lastname, phone_number, city, address_1, address_2)
                             VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :address_1, :address_2)""",
-                           {"user_id": session["user_id"], "firstname": firstname, "lastname": lastname,
+                           {"user_id": uid, "firstname": firstname, "lastname": lastname,
                             "phone_number": phone_number,
                             "city": city, "address_1": address_1, "address_2": address_2})
         else:
             cursor.execute("""INSERT INTO users(user_id, firstname, lastname, phone_number, city, address_1)
                             VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :address_1)""",
-                           {"user_id": session["user_id"], "firstname": firstname, "lastname": lastname,
+                           {"user_id": uid, "firstname": firstname, "lastname": lastname,
                             "phone_number": phone_number,
                             "city": city, "address_1": address_1})
 
@@ -339,4 +340,4 @@ def special_orders():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
