@@ -77,7 +77,17 @@ const CartProcess = ({ TotalPrice }) => {
         <div className="cart-process">
           <div className="cart-info">
             <h4>address</h4>
-            <button onClick={ClearCart}>clear</button>
+            <div className="update-address">
+              <div className="address-details">
+                <h4>Main address</h4>
+                <p>addesss in details like 104ST line 4 debartment 04</p>
+                <div className="phone">
+                  <span>Phone number </span>
+                  <button onClick={ClearCart}>Save</button>
+                </div>
+              </div>
+              <button>Update</button>
+            </div>
             <div className="cart-inputs">
               <div className="input-01">
                 <input
@@ -99,7 +109,6 @@ const CartProcess = ({ TotalPrice }) => {
               </div>
 
               <div className=" input-02">
-                {/* <div></div> */}
                 <input
                   type="number"
                   name=""

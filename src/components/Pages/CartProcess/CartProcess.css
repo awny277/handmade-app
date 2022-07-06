@@ -1,3 +1,37 @@
+.address-details {
+    margin-bottom: 5px;
+    background-color: white;
+    padding: 19px 10px;
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+.update-address button {
+    width: 40%;
+    margin: 15px 30%  ;
+    background-color: white;
+    padding: 7px;
+    border: 1px solid #E2803D;
+    border-radius: 30px;
+    font-size: 25px;
+}
+
+.phone  {
+    display: flex;
+    justify-content: space-between;
+}
+
+ .phone button {
+    width: 40%;
+    background-color: white;
+    margin: 0 !important;
+    padding: 7px;
+    border: 1px solid #E2803D;
+    border-radius: 30px;
+    font-size: 25px;
+ }
+
+
 .container-process {
     margin-top: 30px;
 }
