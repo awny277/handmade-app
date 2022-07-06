@@ -12,11 +12,12 @@ const CartProcess = ({ TotalPrice }) => {
   const [state, setState] = useState("");
   const [address_1, setAddress_1] = useState("");
   const [address_2, setAddress_2] = useState("");
+  const [userData, setUserData] = useState([]);
 
   useEffect(() => {
-    axios.get("http://127.0.0.1:5000/user_info").then((res) => {
+    axios.get("http://127.0.0.1:5000/user_details").then((res) => {
       const result = res.data;
-      console.log(JSON.parse(result));
+      setUserData(result);
     });
   }, []);
 
