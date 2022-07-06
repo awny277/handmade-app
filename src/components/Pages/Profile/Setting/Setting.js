@@ -11,6 +11,7 @@ const Setting = ({ userInfo }) => {
   const [state, setState] = useState("");
   const [address_1, setAddress_1] = useState("");
   const [address_2, setAddress_2] = useState("");
+  // const [password, setPassword] = useState("");
 
   const SettingHandeller = (e) => {
     if (
@@ -165,6 +166,17 @@ const Setting = ({ userInfo }) => {
                   onChange={(e) => setAddress_2(e.target.value)}
                 />
               </div>
+
+              {/* <div className="input-04">
+                <input
+                  type="text"
+                  name=""
+                  id=""
+                  placeholder="Address Line2: Apartment,Suite,Unit Building , Floor , Etc(optinal)"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div> */}
 
               {/* <div className="input-05">
                 <input type="checkbox" name="" id="checked" />
