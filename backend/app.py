@@ -85,27 +85,24 @@ def get_cart():
     return json.dumps(products_)
 
 
-@app.post("/order")
+@app.get("/order")
 def order():
     with connection:
         cursor.execute("INSERT INTO orders(user_id) VALUES(?)", (user_id,))
 
     order_id = cursor.execute("SELECT id FROM orders WHERE user_id = ?", (user_id,)).fetchall()[-1]["id"]
 
-    request_data = request.get_json()
+    products_ids = cursor.execute("SELECT product_id FROM carts WHERE user_id = ?", (user_id,)).fetchall()
 
-    products_ids = None
-
-    if request_data:
-        if "products_ids" in request_data:
-            products_ids = request_data["products_ids"]
-
-    if not products:
+    if not products_ids:
         return "Failed to place order"
 
-    for product_id in products_ids:
+    for key, product_id in products_ids.items():
         with connection:
             cursor.execute("INSERT INTO order_items VALUES(?, ?)", (order_id, product_id))
+    
+    with connection:
+        cursor.execute("DELETE * FROM carts WHERE user_id = ?", (user_id,))
 
     return "Order placed!"
 
@@ -203,7 +200,7 @@ def user():
 
 
 @app.route("/user_details")
-def user_info():
+def user_details():
     user_details_ = cursor.execute("SELECT * FROM users_details WHERE user_id = ?", (user_id,)).fetchone()
     return json.dumps(user_details_)
 
