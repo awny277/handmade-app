@@ -18,7 +18,7 @@ const UserRegister = () => {
         window.localStorage.setItem("userName", "");
         window.localStorage.setItem("email", "");
         window.localStorage.setItem("isOline", "false");
-        // window.location.reload(false);
+        window.location.reload(false);
       });
     navigate("/");
   };
@@ -171,17 +171,34 @@ const UserRegister = () => {
         },
       });
       if (password) {
-        axios
-          .post("http://127.0.0.1:5000/login", {
+        fetch("http://127.0.0.1:5000/login", {
+          mode: "cors",
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
             email,
             password,
+          }),
+          credentials: "include",
+        })
+          // axios
+          //   .post("http://127.0.0.1:5000/login", {
+          //     email,
+          //     password,
+          //   })
+          .then(async (res) => {
+            // console.log(res.json());
+            const data = await res.json();
+
+            console.log(data);
+            return data;
           })
-          .then((res) => {
-            console.log(res);
-            return res;
-          })
-          .then((res) => {
-            if (res.data.message === "Invalid email and/or password") {
+          .then((data) => {
+            if (data === "Invalid email and/or password") {
               Swal.fire({
                 icon: "error",
                 title: "Oops...",
@@ -192,9 +209,9 @@ const UserRegister = () => {
                 HandlerReister();
               };
             } else {
-              window.localStorage.setItem("userID", res.data.id);
-              window.localStorage.setItem("userName", res.data.username);
-              window.localStorage.setItem("email", res.data.email);
+              window.localStorage.setItem("userID", data.id);
+              window.localStorage.setItem("userName", data.username);
+              window.localStorage.setItem("email", data.email);
               window.localStorage.setItem("isOline", "true");
               // window.location.reload(false);
             }

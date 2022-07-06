@@ -12,12 +12,9 @@ app.config['SECRET_KEY'] = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 # app.config["SESSION_TYPE"] = "filesystem"
 # Session(app)
 
-
 @app.route("/")
 def index():
-    session["user_id"] = 1
     return "Hello, {}".format(session["user_id"])
-
 
 @app.route("/products")
 def products():
@@ -251,8 +248,8 @@ def set_profile():
             address_2 = request_data["address_2"]
 
     with connection:
-        cursor.execute("DELETE FROM users_info WHERE user_id = ?", (session["user_id"],))
-
+        # cursor.execute("DELETE FROM users_info WHERE user_id = ?", (session["user_id"],))
+        
         if state and address_2:
             cursor.execute("""INSERT INTO users_info(user_id, firstname, lastname, phone_number, city, state, 
             address_1, address_2) VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :state, :address_1, 
@@ -342,5 +339,4 @@ def special_orders():
 
 
 if __name__ == "__main__":
-    # app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
     app.run()

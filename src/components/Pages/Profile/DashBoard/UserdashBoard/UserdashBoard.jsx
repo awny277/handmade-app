@@ -14,10 +14,7 @@ const UserdashBoard = ({ sepialOrder, setSpecialOrder, userInfo }) => {
   const [SelectImage, setSelectImage] = useState(
     "https://cdn.shopify.com/s/files/1/0108/3038/1113/products/product35_720x.jpg?v=1532677866"
   );
-  // const [SelectImagePc, setSelectImagePc] = useState();
-  // const formData = new FormData();
-  // formData.append("myFile", SelectImagePc);
-  // console.log(formData);
+
   const ResetFields = () => {
     setProjectTitle("");
     setSkills("");
@@ -170,20 +167,31 @@ const UserdashBoard = ({ sepialOrder, setSpecialOrder, userInfo }) => {
                     }
                     value={projectCategType}
                   >
-                    <option value="Clothes">clothes</option>
-                    <option value="Home">home</option>
-                    <option value="Wax products">wax products</option>
-                    <option value="Wood Work">wood work</option>
-                    <option value="Metal Works">metal works</option>
-                    <option value="Pottery">Pottery</option>
-                    <option value="Carpets">Carpets</option>
-                    {/* Carpets and kilims */}
+                    <option value="Baskets">baskets</option>
+                    <option value="Mats Rugs">mats-rugs</option>
+                    <option value="Cushions">cushions</option>
+                    <option value="Banquettes Ottomans Pouffes">
+                      banquettes-ottomans-pouffes
+                    </option>
+                    <option value="Chairs">chairs</option>
+                    <option value="Bags Clutches">bags-clutches</option>
                   </Form.Select>
                   <Form.Text id="passwordHelpBlock" muted>
                     Select the type or material you want .
                   </Form.Text>
                 </FloatingLabel>
-                {projectCategType === "Clothes" && (
+                <FloatingLabel controlId="floatingInput" label="Image Url ">
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter Image Url"
+                    value={SelectImage}
+                    onChange={(e) => setSelectImage(e.target.value)}
+                  />
+                  <Form.Text id="passwordHelpBlock" muted>
+                    Include a Image Url that accurately describes your project.
+                  </Form.Text>
+                </FloatingLabel>
+                {/* {projectCategType === "Clothes" && (
                   <FloatingLabel
                     controlId="floatingSelect"
                     label="Select Sub Category Type"
@@ -224,7 +232,7 @@ const UserdashBoard = ({ sepialOrder, setSpecialOrder, userInfo }) => {
                       Select the subtype or material you want .
                     </Form.Text>
                   </FloatingLabel>
-                )}
+                )} */}
               </Col>
               <Col className="cloumn" xs={12} md={5}>
                 <FloatingLabel
@@ -234,7 +242,7 @@ const UserdashBoard = ({ sepialOrder, setSpecialOrder, userInfo }) => {
                   <Form.Control
                     as="textarea"
                     placeholder="Leave Project Details here"
-                    style={{ height: "250px" }}
+                    style={{ height: "300px" }}
                     value={projectDetails}
                     onChange={(e) => setProjectDetails(e.target.value)}
                   />
@@ -243,61 +251,17 @@ const UserdashBoard = ({ sepialOrder, setSpecialOrder, userInfo }) => {
                     examples of what you want if possible.
                   </Form.Text>
                 </FloatingLabel>
-                <FloatingLabel controlId="floatingInput" label="Image Url ">
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter Image Url"
-                    value={SelectImage}
-                    onChange={(e) => setSelectImage(e.target.value)}
-                  />
-                  <Form.Text id="passwordHelpBlock" muted>
-                    Include a Image Url that accurately describes your project.
-                  </Form.Text>
-                </FloatingLabel>
-                {/* <Form.Group controlId="formFile" className="mb-3">
-                  <Form.Label>Default file input example</Form.Label>
-                  <Form.Control
-                    type="file"
-                    // value={SelectImagePc}
-                    name="myImage"
-                    onChange={(e) => setSelectImagePc(e.target.files[0])}
-                  />
-                </Form.Group> */}
               </Col>
             </Row>
           </Form>
           <Row className="text-center m-3">
             <Col>
-              <button
-                className={"save-button"}
-                // to={"/NewProject"}
-                onClick={formSumited}
-              >
+              <button className={"save-button"} onClick={formSumited}>
                 save
               </button>
             </Col>
           </Row>
         </div>
-        {/* {SelectImagePc && (
-          <div>
-            <img
-              alt="not fount"
-              width={"250px"}
-              src={URL.createObjectURL(SelectImagePc)}
-            />
-            <br />
-            <button onClick={() => setSelectImagePc(null)}>Remove</button>
-          </div>
-        )} */}
-        {/* <img src={SelectImage} alt="tesst" /> */}
-        {/* <Row>
-          <Col className="cloumn" xs={12} md={5}>
-            <div>
-              <h2>Start building your order</h2>
-              <p></p>
-            </div>
-          </Col>
-        </Row> */}
       </div>
     </Container>
   );

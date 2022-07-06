@@ -8,18 +8,15 @@ const SellerDashBoard = ({ sepialOrder, setSpecialOrder }) => {
   const [budget, setBudegt] = useState("");
   const [projectDetails, setProjectDetails] = useState("");
   const [projectCategType, setProjectCategType] = useState("Clothes");
-  const [projectSubCategType, setProjectSubCategType] = useState("");
-  // const [selectedImage, setSelectedImage] = useState(null);
   const [SelectImage, setSelectImage] = useState(
     "https://cdn.shopify.com/s/files/1/0108/3038/1113/products/product35_720x.jpg?v=1532677866"
   );
-  // console.log(SelectImage);
+
   const ResetFields = () => {
     setProjectTitle("");
     setBudegt("");
     setProjectDetails("");
     setProjectCategType("Clothes");
-    setProjectSubCategType("");
     window.location.reload(false);
   };
 
@@ -64,21 +61,18 @@ const SellerDashBoard = ({ sepialOrder, setSpecialOrder }) => {
       });
     } else {
       const data = {
-        // id: new Date(),
         price: budget,
         title: projectTitle,
         description: projectDetails,
         category: projectCategType,
-        // projectSubCategType: projectSubCategType,
         img_path: SelectImage,
       };
-      // http://127.0.0.1:5000/add_product
       axios
         .post("http://127.0.0.1:5000/add_product", {
           ...data,
         })
         .then((res) => console.log(res))
-        // .then(ResetFields)
+        .then(ResetFields)
         .catch((err) => console.log(err));
       const updateData = [...sepialOrder, data];
       setSpecialOrder(updateData);
@@ -152,20 +146,21 @@ const SellerDashBoard = ({ sepialOrder, setSpecialOrder }) => {
                     }
                     value={projectCategType}
                   >
-                    <option value="Clothes">clothes</option>
-                    <option value="Home">home</option>
-                    <option value="Wax products">wax products</option>
-                    <option value="Wood Work">wood work</option>
-                    <option value="Metal Works">metal works</option>
-                    <option value="Pottery">Pottery</option>
-                    <option value="Carpets">Carpets</option>
+                    <option value="Baskets">baskets</option>
+                    <option value="Mats Rugs">mats-rugs</option>
+                    <option value="Cushions">cushions</option>
+                    <option value="Banquettes Ottomans Pouffes">
+                      banquettes-ottomans-pouffes
+                    </option>
+                    <option value="Chairs">chairs</option>
+                    <option value="Bags Clutches">bags-clutches</option>
                     {/* Carpets and kilims */}
                   </Form.Select>
                   <Form.Text id="passwordHelpBlock" muted>
                     Select the type or material you want .
                   </Form.Text>
                 </FloatingLabel>
-                {projectCategType === "Clothes" && (
+                {/* {projectCategType === "Clothes" && (
                   <FloatingLabel
                     controlId="floatingSelect"
                     label="Select Sub Category Type"
@@ -206,7 +201,7 @@ const SellerDashBoard = ({ sepialOrder, setSpecialOrder }) => {
                       Select the subtype or material you want .
                     </Form.Text>
                   </FloatingLabel>
-                )}
+                )} */}
                 <FloatingLabel controlId="floatingInput" label="Image Url ">
                   <Form.Control
                     type="text"
