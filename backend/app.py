@@ -6,11 +6,6 @@ from werkzeug.security import check_password_hash, generate_password_hash
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
-# app.config['SECRET_KEY'] = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
-# app.config["SESSION_PERMANENT"] = False
-# app.config["SESSION_TYPE"] = "filesystem"
-# Session(app)
-
 user_id = 0
 
 @app.route("/")
@@ -58,7 +53,7 @@ def add_product():
 
     with connection:
         cursor.execute("INSERT INTO products(title, description, price, category, img_path) VALUES(?, ?, ?, ?, ?)",
-                       (title, description, price, category, img_path))
+                    (title, description, price, category, img_path))
 
     return "Product added."
 
@@ -85,7 +80,7 @@ def add_cart():
 @app.route("/get_cart")
 def get_cart():
     products_ = cursor.execute("""SELECT * FROM products WHERE id IN
-                                 (SELECT product_id FROM carts WHERE user_id = ?)""", (user_id,)).fetchall()
+                                (SELECT product_id FROM carts WHERE user_id = ?)""", (user_id,)).fetchall()
     return str(products_)
 
 
@@ -145,7 +140,7 @@ def register():
         # Insert the new user into the database
         with connection:
             cursor.execute("INSERT INTO users(username, email, hash, type) values(?, ?, ?, ?)",
-                           (username, email, generate_password_hash(password), type_))
+                        (username, email, generate_password_hash(password), type_))
         
         global user_id
         user_id = cursor.execute("SELECT id FROM users WHERE username = ?", (username,)).fetchone()["id"]
@@ -261,25 +256,25 @@ def set_profile():
             cursor.execute("""INSERT INTO users_info(user_id, firstname, lastname, phone_number, city, state, 
             address_1, address_2) VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :state, :address_1, 
             :address_2)""",
-                           {"user_id": user_id, "firstname": firstname, "lastname": lastname,
+                        {"user_id": user_id, "firstname": firstname, "lastname": lastname,
                             "phone_number": phone_number,
                             "city": city, "state": state, "address_1": address_1, "address_2": address_2})
         elif state and not address_2:
             cursor.execute("""INSERT INTO users(user_id, firstname, lastname, phone_number, city, state, address_1)
                             VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :state, :address_1)""",
-                           {"user_id": user_id, "firstname": firstname, "lastname": lastname,
+                        {"user_id": user_id, "firstname": firstname, "lastname": lastname,
                             "phone_number": phone_number,
                             "city": city, "state": state, "address_1": address_1})
         elif not state and address_2:
             cursor.execute("""INSERT INTO users(user_id, firstname, lastname, phone_number, city, address_1, address_2)
                             VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :address_1, :address_2)""",
-                           {"user_id": user_id, "firstname": firstname, "lastname": lastname,
+                        {"user_id": user_id, "firstname": firstname, "lastname": lastname,
                             "phone_number": phone_number,
                             "city": city, "address_1": address_1, "address_2": address_2})
         else:
             cursor.execute("""INSERT INTO users(user_id, firstname, lastname, phone_number, city, address_1)
                             VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :address_1)""",
-                           {"user_id": user_id, "firstname": firstname, "lastname": lastname,
+                        {"user_id": user_id, "firstname": firstname, "lastname": lastname,
                             "phone_number": phone_number,
                             "city": city, "address_1": address_1})
 
@@ -329,7 +324,7 @@ def add_special_order():
     with connection:
         cursor.execute("""INSERT INTO special_orders(user_id, title, description, required_skills, est_delivery_time, 
         expected_budget, category, sub_category, img_url) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)""", 
-                       (user_id, title, description, required_skills, est_delivery_time, expected_budget,
+                    (user_id, title, description, required_skills, est_delivery_time, expected_budget,
                         category, sub_category, img_url))
 
     return "Special order added."
@@ -338,7 +333,7 @@ def add_special_order():
 @app.route("/special_orders")
 def special_orders():
     special_orders_ = cursor.execute("SELECT * FROM special_orders WHERE user_id = ?", (user_id,)).fetchall()
-    return special_orders_
+    return str(special_orders_)
 
 
 if __name__ == "__main__":
