@@ -11,6 +11,51 @@ connection = sqlite3.connect("database.db", check_same_thread=False)
 connection.row_factory = dict_factory
 cursor = connection.cursor()
 
+# cursor.execute("""CREATE TABLE users (
+#     id INTEGER PRIMARY KEY,
+#     username TEXT UNIQUE NOT NULL,
+#     email TEXT NOT NULL,
+#     hash TEXT NOT NULL,
+#     type TEXT NOT NULL
+# )""")
+# connection.commit()
+
+# cursor.execute("""CREATE TABLE users_details (
+#     user_id INTEGER,
+#     firstname TEXT,
+#     lastname TEXT,
+#     phone_number TEXT,
+#     city TEXT,
+#     state TEXT,
+#     address_1 TEXT,
+#     address_2 TEXT,
+#     FOREIGN KEY(user_id) REFERENCES users(id)
+# )""")
+# connection.commit()
+
+# cursor.execute("""CREATE TABLE carts (
+#     user_id INTEGER NOT NULL,
+#     product_id INTEGER NOT NULL,
+#     FOREIGN KEY(user_id) REFERENCES users(id),
+#     FOREIGN KEY(product_id) REFERENCES products(id)
+# )""")
+# connection.commit()
+
+# cursor.execute("""CREATE TABLE orders (
+#     id INTEGER PRIMARY KEY,
+#     user_id INTEGER,
+#     FOREIGN KEY(user_id) REFERENCES users(id)
+# )""")
+# connection.commit()
+
+# cursor.execute("""CREATE TABLE order_items (
+#     order_id INTEGER,
+#     product_id INTEGER,
+#     FOREIGN KEY(order_id) REFERENCES orders(id),
+#     FOREIGN KEY(product_id) REFERENCES products(id)
+# )""")
+# connection.commit()
+
 # cursor.execute("""CREATE TABLE special_orders (
 #         id INTEGER PRIMARY KEY,
 #         user_id INTEGER,
@@ -25,57 +70,6 @@ cursor = connection.cursor()
 #     )""")
 # connection.commit()
 
-# with connection:
-#     cursor.execute("DROP TABLE users_info")
-#     cursor.execute("DROP TABLE users")
-
-# try:
-#     cursor.execute("""CREATE TABLE users_details (
-#         user_id INTEGER,
-#         firstname TEXT,
-#         lastname TEXT,
-#         phone_number TEXT,
-#         city TEXT,
-#         state TEXT,
-#         address_1 TEXT,
-#         address_2 TEXT,
-#         FOREIGN KEY(user_id) REFERENCES users(id)
-#     )""")
-#     connection.commit()
-    
-#     cursor.execute("""CREATE TABLE users (
-#         id INTEGER PRIMARY KEY,
-#         username TEXT UNIQUE NOT NULL,
-#         email TEXT NOT NULL,
-#         hash TEXT NOT NULL,
-#         type TEXT NOT NULL
-#     )""")
-#     connection.commit()
-
-#     cursor.execute("""CREATE TABLE carts (
-#         user_id INTEGER NOT NULL,
-#         product_id INTEGER NOT NULL,
-#         FOREIGN KEY(user_id) REFERENCES users(id),
-#         FOREIGN KEY(product_id) REFERENCES products(id)
-#     )""")
-#     connection.commit()
-
-#     cursor.execute("""CREATE TABLE orders (
-#         id INTEGER PRIMARY KEY,
-#         user_id INTEGER,
-#         FOREIGN KEY(user_id) REFERENCES users(id)
-#     )""")
-#     connection.commit()
-
-#     cursor.execute("""CREATE TABLE order_items (
-#         order_id INTEGER,
-#         product_id INTEGER,
-#         FOREIGN KEY(order_id) REFERENCES orders(id),
-#         FOREIGN KEY(product_id) REFERENCES products(id)
-#     )""")
-#     connection.commit()
-# except:
-#     pass
 
 def get_products():
     """
