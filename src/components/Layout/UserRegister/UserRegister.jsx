@@ -19,6 +19,7 @@ const UserRegister = () => {
         window.localStorage.setItem("email", "");
         window.localStorage.setItem("type", "");
         window.localStorage.setItem("isOline", "false");
+        window.localStorage.setItem("Profilepdated", "false");
         window.location.reload(false);
       });
     navigate("/");

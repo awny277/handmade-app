@@ -50,7 +50,10 @@ const Setting = ({ userInfo }) => {
           address_1,
           address_2,
         })
-        .then((res) => console.log(res))
+        .then((res) => {
+          console.log(res);
+          window.localStorage.setItem("Profilepdated", "true");
+        })
         .catch((err) => console.log(err));
     }
   };

@@ -22,6 +22,14 @@ const Cart = ({ setTotalPrice, TotalLength }) => {
     return acc + price;
   }, 0);
 
+  const HandelCheckout = () => {
+    if (window.localStorage.getItem("Profilepdated") === "true") {
+      navigate(`/cartProcess`);
+    } else {
+      navigate(`/profile/setting`);
+    }
+  };
+
   return (
     <div className="main-Header">
       <div className=" container container-cart">
@@ -83,12 +91,7 @@ const Cart = ({ setTotalPrice, TotalLength }) => {
                   <p>subtotal</p>
                   <span>EGP{Totalprice}</span>
                 </div>
-                <button
-                  type=""
-                  onClick={() => {
-                    navigate(`/cartProcess`);
-                  }}
-                >
+                <button type="" onClick={HandelCheckout}>
                   CONTINUE TO CHECKOUT
                 </button>
               </div>

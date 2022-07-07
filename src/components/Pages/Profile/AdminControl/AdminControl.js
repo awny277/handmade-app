@@ -7,7 +7,7 @@ import { GrUserSettings } from "react-icons/gr";
 import { FiLogOut } from "react-icons/fi";
 import "./AdminControl.css";
 
-const AdminControl = ({ userInfo }) => {
+const AdminControl = () => {
   return (
     <div className="AdminControl">
       <div className="infromation">
@@ -18,11 +18,14 @@ const AdminControl = ({ userInfo }) => {
         <span>{window.localStorage.getItem("type")}</span>
       </div>
       <ul>
-        <li>
-          <NavLink to={"/profile/controlPanal"}>
-            <AiFillControl className="controlIcon" /> control Panal
-          </NavLink>
-        </li>
+        {window.localStorage.getItem("type") === "user" && (
+          <li>
+            <NavLink to={"/profile/controlPanal"}>
+              <AiFillControl className="controlIcon" /> control Panal
+            </NavLink>
+          </li>
+        )}
+
         <li>
           <NavLink to={"/profile/dashBoard"}>
             <RiDashboardFill className="controlIcon" /> DashBoard

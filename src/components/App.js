@@ -91,6 +91,8 @@ function App() {
     const result = [...CartProducts, product];
     setCartProducts(result);
   };
+
+  const [getOffer, getAllOffers] = useState([]);
   return (
     <React.Fragment>
       <NavBar userInfo={userInfo} TotalLenght={TotalLenght} />
@@ -128,7 +130,12 @@ function App() {
         />
         <Route
           path="/specialProductDetailsPage/:id"
-          element={<SpecialProductDetailsPage userInfo={userInfo} />}
+          element={
+            <SpecialProductDetailsPage
+              userInfo={userInfo}
+              getAllOffers={(e) => getAllOffers(e)}
+            />
+          }
         />
         <Route
           path="/cart"
@@ -158,7 +165,10 @@ function App() {
             path="/profile/setting"
             element={<Setting userInfo={userInfo} />}
           />
-          <Route path="/profile/controlPanal" element={<ControlPanal />} />
+          <Route
+            path="/profile/controlPanal"
+            element={<ControlPanal getOffer={getOffer} />}
+          />
         </Route>
       </Routes>
       <Footer />
