@@ -1,17 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Cart.css";
 import { FaTrashAlt, FaPlus, FaMinus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Cart = ({ userInfo, CartProducts }) => {
   const navigate = useNavigate();
+  const [cartItems, setCartItems] = useState([]);
+  useEffect(() => {
+    axios.get("http://127.0.0.1:5000/get_cart").then((res) => {
+      const result = JSON.parse(res.data);
+      console.log(result);
+      // setCartItems(result);
+      // console.log(cartItems);
+    });
+  }, [cartItems]);
   return (
     <div className="main-Header">
       <div className=" container container-cart">
         <h2>shopping bag</h2>
         <div className="carts">
           <div className="cart-section">
-            <h3>my shooping bag ({CartProducts.length} items)</h3>
+            <h3>my shooping bag ({cartItems.length} items)</h3>
             {CartProducts.map((ele, idx) => {
               return (
                 <div className="cart-details" key={idx}>

@@ -20,6 +20,7 @@ import { Col, Container, FloatingLabel, Form, Row } from "react-bootstrap";
 
 const ProductDetails = ({ addnewProject, userInfo, AddtoCart }) => {
   const [result, setResult] = useState({});
+  const [UrlImage, setUrlImge] = useState(false);
   const [similler, setSimiller] = useState([]);
   const [review, setReview] = useState("");
   const [comment, setCommetns] = useState([]);
@@ -31,6 +32,11 @@ const ProductDetails = ({ addnewProject, userInfo, AddtoCart }) => {
     const getDate = async () => {
       axios.get(`http://127.0.0.1:5000/product/${id}`).then((res) => {
         const product = res.data;
+        if (product.img_path.startsWith("h") === true) {
+          setUrlImge(true);
+        } else {
+          setUrlImge(false);
+        }
         setResult(product);
         setSimiller(simillerProducts);
       });
@@ -42,61 +48,61 @@ const ProductDetails = ({ addnewProject, userInfo, AddtoCart }) => {
     getDate();
   }, [id, result.id, result.category, addnewProject]);
 
-  const ReviewSubmit = (e) => {
-    if (localStorage.getItem("isOline") === "false") {
-      e.preventDefault();
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.addEventListener("mouseenter", Swal.stopTimer);
-          toast.addEventListener("mouseleave", Swal.resumeTimer);
-        },
-      });
-      Toast.fire({
-        icon: "error",
-        title: "You must log in.",
-      });
-    } else if (review.length === 0) {
-      e.preventDefault();
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.addEventListener("mouseenter", Swal.stopTimer);
-          toast.addEventListener("mouseleave", Swal.resumeTimer);
-        },
-      });
-      Toast.fire({
-        icon: "error",
-        title: "All fields must be completed.",
-      });
-    } else {
-      const data = [
-        {
-          time: new Date(),
-          id: new Date(),
-          userOffer: userInfo.userName,
-          accountUserOffer: userInfo.email,
-          comment: review,
-        },
-      ];
-      const comments = result.comments.concat(data);
-      axios
-        .put(`https://6259ff6a43fda1299a146d28.mockapi.io/products/${id}`, {
-          comments,
-        })
-        .then(setCommetns(comments))
-        .catch((err) => console.log(err));
-      setReview("");
-    }
-  };
+  // const ReviewSubmit = (e) => {
+  //   if (localStorage.getItem("isOline") === "false") {
+  //     e.preventDefault();
+  //     const Toast = Swal.mixin({
+  //       toast: true,
+  //       position: "top-end",
+  //       showConfirmButton: false,
+  //       timer: 3000,
+  //       timerProgressBar: true,
+  //       didOpen: (toast) => {
+  //         toast.addEventListener("mouseenter", Swal.stopTimer);
+  //         toast.addEventListener("mouseleave", Swal.resumeTimer);
+  //       },
+  //     });
+  //     Toast.fire({
+  //       icon: "error",
+  //       title: "You must log in.",
+  //     });
+  //   } else if (review.length === 0) {
+  //     e.preventDefault();
+  //     const Toast = Swal.mixin({
+  //       toast: true,
+  //       position: "top-end",
+  //       showConfirmButton: false,
+  //       timer: 3000,
+  //       timerProgressBar: true,
+  //       didOpen: (toast) => {
+  //         toast.addEventListener("mouseenter", Swal.stopTimer);
+  //         toast.addEventListener("mouseleave", Swal.resumeTimer);
+  //       },
+  //     });
+  //     Toast.fire({
+  //       icon: "error",
+  //       title: "All fields must be completed.",
+  //     });
+  //   } else {
+  //     const data = [
+  //       {
+  //         time: new Date(),
+  //         id: new Date(),
+  //         userOffer: userInfo.userName,
+  //         accountUserOffer: userInfo.email,
+  //         comment: review,
+  //       },
+  //     ];
+  //     const comments = result.comments.concat(data);
+  //     axios
+  //       .put(`https://6259ff6a43fda1299a146d28.mockapi.io/products/${id}`, {
+  //         comments,
+  //       })
+  //       .then(setCommetns(comments))
+  //       .catch((err) => console.log(err));
+  //     setReview("");
+  //   }
+  // };
   const Counterless = () => {
     if (count === 1) {
       setCount(1);
@@ -117,7 +123,11 @@ const ProductDetails = ({ addnewProject, userInfo, AddtoCart }) => {
     <div className="container main-sections">
       <div className="container1">
         <div className="sec-01">
-          <img src={`../${result.img_path}`} alt="productImage" />
+          {UrlImage === true ? (
+            <img src={`${result.img_path}`} alt="test" />
+          ) : (
+            <img src={`../${result.img_path}`} alt="productImage" />
+          )}
         </div>
         <div className="sec-02">
           <h3>{result.title}</h3>

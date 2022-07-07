@@ -53,15 +53,15 @@ function App() {
         .get("https://6259ff6a43fda1299a146d28.mockapi.io/users/" + ID)
         .then((res) => {
           setUserInfo(res.data);
-        })
-        .catch(() => {
-          window.localStorage.setItem("userName", "");
-          window.localStorage.setItem("password", "");
-          window.localStorage.setItem("email", "");
-          window.localStorage.setItem("userID", "");
-          window.localStorage.setItem("isOline", "false");
-          window.location.reload(false);
         });
+      // .catch(() => {
+      //   window.localStorage.setItem("userName", "");
+      //   window.localStorage.setItem("password", "");
+      //   window.localStorage.setItem("email", "");
+      //   window.localStorage.setItem("userID", "");
+      //   window.localStorage.setItem("isOline", "false");
+      //   window.location.reload(false);
+      // });
     } else {
       return null;
     }
@@ -113,7 +113,7 @@ function App() {
           element={
             <ProductDetails
               addnewProject={addnewProdcuts}
-              userInfo={userInfo}
+              // userInfo={userInfo}
               AddtoCart={(e) => AddtoCart(e)}
             />
           }

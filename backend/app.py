@@ -54,7 +54,7 @@ def add_product():
 
     with connection:
         cursor.execute("INSERT INTO products(title, description, price, category, img_path) VALUES(?, ?, ?, ?, ?)",
-                       (title, description, price, category, img_path))
+                    (title, description, price, category, img_path))
 
     return "Product added."
 
@@ -141,7 +141,7 @@ def register():
         # Insert the new user into the database
         with connection:
             cursor.execute("INSERT INTO users(username, email, hash, type) values(?, ?, ?, ?)",
-                           (username, email, generate_password_hash(password), type_))
+                        (username, email, generate_password_hash(password), type_))
         
         global user_id
         user_id = cursor.execute("SELECT id FROM users WHERE username = ?", (username,)).fetchone()["id"]
@@ -257,25 +257,25 @@ def set_profile():
             cursor.execute("""INSERT INTO users_details(user_id, firstname, lastname, phone_number, city, state, 
             address_1, address_2) VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :state, :address_1, 
             :address_2)""",
-                           {"user_id": user_id, "firstname": firstname, "lastname": lastname,
+                        {"user_id": user_id, "firstname": firstname, "lastname": lastname,
                             "phone_number": phone_number,
                             "city": city, "state": state, "address_1": address_1, "address_2": address_2})
         elif state and not address_2:
             cursor.execute("""INSERT INTO users_details(user_id, firstname, lastname, phone_number, city, state, address_1)
                             VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :state, :address_1)""",
-                           {"user_id": user_id, "firstname": firstname, "lastname": lastname,
+                        {"user_id": user_id, "firstname": firstname, "lastname": lastname,
                             "phone_number": phone_number,
                             "city": city, "state": state, "address_1": address_1})
         elif not state and address_2:
             cursor.execute("""INSERT INTO users_details(user_id, firstname, lastname, phone_number, city, address_1, address_2)
                             VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :address_1, :address_2)""",
-                           {"user_id": user_id, "firstname": firstname, "lastname": lastname,
+                        {"user_id": user_id, "firstname": firstname, "lastname": lastname,
                             "phone_number": phone_number,
                             "city": city, "address_1": address_1, "address_2": address_2})
         else:
             cursor.execute("""INSERT INTO users_details(user_id, firstname, lastname, phone_number, city, address_1)
                             VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :address_1)""",
-                           {"user_id": user_id, "firstname": firstname, "lastname": lastname,
+                        {"user_id": user_id, "firstname": firstname, "lastname": lastname,
                             "phone_number": phone_number,
                             "city": city, "address_1": address_1})
 
@@ -322,13 +322,10 @@ def add_special_order():
         if "img_url" in request_data:
             img_url = request_data["img_url"]
 
-    # if not title or not description or not required_skills or not expected_budget or not est_delivery_time or not category or not sub_category or not img_url:
-    #     return "Failed."
-
     with connection:
         cursor.execute("""INSERT INTO special_orders(user_id, title, description, required_skills, est_delivery_time, 
         expected_budget, category, sub_category, img_url) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)""", 
-                       (user_id, title, description, required_skills, est_delivery_time, expected_budget,
+                    (user_id, title, description, required_skills, est_delivery_time, expected_budget,
                         category, sub_category, img_url))
 
     return "Special order added."

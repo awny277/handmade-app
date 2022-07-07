@@ -6,7 +6,7 @@ import "./DashBoard.css";
 const DashBoard = ({ sepialOrder, setSpecialOrder, userInfo }) => {
   return (
     <React.Fragment>
-      {userInfo.type === "seller" ? (
+      {window.localStorage.getItem("type") === "seller" ? (
         <SellerDashBoard
           sepialOrder={sepialOrder}
           setSpecialOrder={setSpecialOrder}
