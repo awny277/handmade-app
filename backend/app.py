@@ -205,7 +205,7 @@ def user():
 @app.route("/user_details")
 def user_info():
     user_details_ = cursor.execute("SELECT * FROM users_details WHERE user_id = ?", (user_id,)).fetchone()
-    return str(user_details_)
+    return json.dumps(user_details_)
 
 
 @app.route("/users")
