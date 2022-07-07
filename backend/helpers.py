@@ -30,7 +30,7 @@ cursor = connection.cursor()
 #     cursor.execute("DROP TABLE users")
 
 # try:
-#     cursor.execute("""CREATE TABLE users_info (
+#     cursor.execute("""CREATE TABLE users_details (
 #         user_id INTEGER,
 #         firstname TEXT,
 #         lastname TEXT,

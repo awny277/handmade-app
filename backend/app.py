@@ -202,10 +202,10 @@ def user():
     return str(user_)
 
 
-@app.route("/user_info")
+@app.route("/user_details")
 def user_info():
-    user_info_ = cursor.execute("SELECT * FROM users_info WHERE user_id = ?", (user_id,)).fetchone()
-    return str(user_info_)
+    user_details_ = cursor.execute("SELECT * FROM users_details WHERE user_id = ?", (user_id,)).fetchone()
+    return str(user_details_)
 
 
 @app.route("/users")
@@ -222,7 +222,7 @@ def schema():
 
 @app.post("/set_profile")
 def set_profile():
-    """Set or update user info"""
+    """Set or update user details"""
 
     request_data = request.get_json()
 
@@ -251,29 +251,29 @@ def set_profile():
             address_2 = request_data["address_2"]
 
     with connection:
-        cursor.execute("DELETE FROM users_info WHERE user_id = ?", (user_id,))
+        cursor.execute("DELETE FROM users_details WHERE user_id = ?", (user_id,))
 
         if state and address_2:
-            cursor.execute("""INSERT INTO users_info(user_id, firstname, lastname, phone_number, city, state, 
+            cursor.execute("""INSERT INTO users_details(user_id, firstname, lastname, phone_number, city, state, 
             address_1, address_2) VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :state, :address_1, 
             :address_2)""",
                            {"user_id": user_id, "firstname": firstname, "lastname": lastname,
                             "phone_number": phone_number,
                             "city": city, "state": state, "address_1": address_1, "address_2": address_2})
         elif state and not address_2:
-            cursor.execute("""INSERT INTO users(user_id, firstname, lastname, phone_number, city, state, address_1)
+            cursor.execute("""INSERT INTO users_details(user_id, firstname, lastname, phone_number, city, state, address_1)
                             VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :state, :address_1)""",
                            {"user_id": user_id, "firstname": firstname, "lastname": lastname,
                             "phone_number": phone_number,
                             "city": city, "state": state, "address_1": address_1})
         elif not state and address_2:
-            cursor.execute("""INSERT INTO users(user_id, firstname, lastname, phone_number, city, address_1, address_2)
+            cursor.execute("""INSERT INTO users_details(user_id, firstname, lastname, phone_number, city, address_1, address_2)
                             VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :address_1, :address_2)""",
                            {"user_id": user_id, "firstname": firstname, "lastname": lastname,
                             "phone_number": phone_number,
                             "city": city, "address_1": address_1, "address_2": address_2})
         else:
-            cursor.execute("""INSERT INTO users(user_id, firstname, lastname, phone_number, city, address_1)
+            cursor.execute("""INSERT INTO users_details(user_id, firstname, lastname, phone_number, city, address_1)
                             VALUES(:user_id, :firstname, :lastname, :phone_number, :city, :address_1)""",
                            {"user_id": user_id, "firstname": firstname, "lastname": lastname,
                             "phone_number": phone_number,
