@@ -4,25 +4,32 @@ import { FaTrashAlt, FaPlus, FaMinus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const Cart = ({ userInfo, CartProducts }) => {
+const Cart = ({ setTotalPrice, TotalLength }) => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
+  const [totalLength, setTotalLength] = useState(0);
   useEffect(() => {
     axios.get("http://127.0.0.1:5000/get_cart").then((res) => {
-      const result = JSON.parse(res.data);
-      console.log(result);
-      // setCartItems(result);
-      // console.log(cartItems);
+      const result = res.data;
+      setTotalLength(result.length);
+      setCartItems(result);
+      TotalLength(totalLength);
     });
-  }, [cartItems]);
+  }, [TotalLength, totalLength]);
+
+  const Totalprice = cartItems.reduce((acc, { price }) => {
+    setTotalPrice(acc + price);
+    return acc + price;
+  }, 0);
+
   return (
     <div className="main-Header">
       <div className=" container container-cart">
-        <h2>shopping bag</h2>
+        <h2>shopping bag </h2>
         <div className="carts">
           <div className="cart-section">
             <h3>my shooping bag ({cartItems.length} items)</h3>
-            {CartProducts.map((ele, idx) => {
+            {cartItems.map((ele, idx) => {
               return (
                 <div className="cart-details" key={idx}>
                   <div className="cart-sec01">
@@ -38,7 +45,7 @@ const Cart = ({ userInfo, CartProducts }) => {
                         <button type="">
                           <FaMinus className="icon-cartNum" />
                         </button>
-                        <span>{ele.count}</span>
+                        <span>1</span>
                         <button type="">
                           <FaPlus className="icon-cartNum" />
                         </button>
@@ -74,7 +81,7 @@ const Cart = ({ userInfo, CartProducts }) => {
               <div className="check-sec02">
                 <div className="subtotal">
                   <p>subtotal</p>
-                  <span>EGP858.00</span>
+                  <span>EGP{Totalprice}</span>
                 </div>
                 <button
                   type=""
