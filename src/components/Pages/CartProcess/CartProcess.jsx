@@ -12,14 +12,15 @@ const CartProcess = ({ TotalPrice }) => {
   const [state, setState] = useState("");
   const [address_1, setAddress_1] = useState("");
   const [address_2, setAddress_2] = useState("");
-  const [userData, setUserData] = useState([]);
+  const [userData, setUserData] = useState({});
+  const [update, setUPdate] = useState(false);
 
-  // useEffect(() => {
-  //   axios.get("http://127.0.0.1:5000/user_details").then((res) => {
-  //     const result = res.data;
-  //     setUserData(result);
-  //   });
-  // }, []);
+  useEffect(() => {
+    axios.get("http://127.0.0.1:5000/user_details").then((res) => {
+      const result = res.data;
+      setUserData(result);
+    });
+  }, []);
 
   const SettingHandeller = (e) => {
     if (
@@ -48,7 +49,6 @@ const CartProcess = ({ TotalPrice }) => {
         title: "All fields must be completed.",
       });
     } else {
-      //http://127.0.0.1:5000/order
       axios
         .post("http://127.0.0.1:5000/set_profile", {
           firstname,
@@ -79,89 +79,91 @@ const CartProcess = ({ TotalPrice }) => {
             <h4>address</h4>
             <div className="update-address">
               <div className="address-details">
-                <h4>Main address</h4>
-                <p>addesss in details like 104ST line 4 debartment 04</p>
+                <h4>{userData.firstname}</h4>
+                <p>{userData.address_1}</p>
                 <div className="phone">
-                  <span>Phone number </span>
+                  <span>{userData.phone_number} </span>
                   <button onClick={ClearCart}>Save</button>
                 </div>
               </div>
-              <button>Update</button>
+              <button onClick={() => setUPdate(!update)}>Update</button>
             </div>
-            <div className="cart-inputs">
-              <div className="input-01">
-                <input
-                  type="text"
-                  name=""
-                  id=""
-                  placeholder="First Name"
-                  value={firstname}
-                  onChange={(e) => setFristName(e.target.value)}
-                />
-                <input
-                  type="text"
-                  name=""
-                  id=""
-                  placeholder="Last Name"
-                  value={lastname}
-                  onChange={(e) => setLastName(e.target.value)}
-                />
-              </div>
+            {update === true && (
+              <div className="cart-inputs">
+                <div className="input-01">
+                  <input
+                    type="text"
+                    name=""
+                    id=""
+                    placeholder="First Name"
+                    value={firstname}
+                    onChange={(e) => setFristName(e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    name=""
+                    id=""
+                    placeholder="Last Name"
+                    value={lastname}
+                    onChange={(e) => setLastName(e.target.value)}
+                  />
+                </div>
 
-              <div className=" input-02">
-                <input
-                  type="number"
-                  name=""
-                  id=""
-                  placeholder="Phone Number"
-                  value={phone_number}
-                  onChange={(e) => setPhone_number(e.target.value)}
-                />
-              </div>
+                <div className=" input-02">
+                  <input
+                    type="number"
+                    name=""
+                    id=""
+                    placeholder="Phone Number"
+                    value={phone_number}
+                    onChange={(e) => setPhone_number(e.target.value)}
+                  />
+                </div>
 
-              <div className="input-01">
-                <input
-                  type="text"
-                  name=""
-                  id=""
-                  placeholder="City"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                />
-                <input
-                  type="text"
-                  name=""
-                  id=""
-                  placeholder="State (Optinal)"
-                  value={state}
-                  onChange={(e) => setState(e.target.value)}
-                />
-              </div>
+                <div className="input-01">
+                  <input
+                    type="text"
+                    name=""
+                    id=""
+                    placeholder="City"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    name=""
+                    id=""
+                    placeholder="State (Optinal)"
+                    value={state}
+                    onChange={(e) => setState(e.target.value)}
+                  />
+                </div>
 
-              <div className="input-04">
-                <input
-                  type="text"
-                  name=""
-                  id=""
-                  placeholder="Address Line1: Street,Address,Company Name, C/O"
-                  value={address_1}
-                  onChange={(e) => setAddress_1(e.target.value)}
-                />
-              </div>
+                <div className="input-04">
+                  <input
+                    type="text"
+                    name=""
+                    id=""
+                    placeholder="Address Line1: Street,Address,Company Name, C/O"
+                    value={address_1}
+                    onChange={(e) => setAddress_1(e.target.value)}
+                  />
+                </div>
 
-              <div className="input-04">
-                <input
-                  type="text"
-                  name=""
-                  id=""
-                  placeholder="Address Line2: Apartment,Suite,Unit Building , Floor , Etc(optinal)"
-                  value={address_2}
-                  onChange={(e) => setAddress_2(e.target.value)}
-                />
-              </div>
+                <div className="input-04">
+                  <input
+                    type="text"
+                    name=""
+                    id=""
+                    placeholder="Address Line2: Apartment,Suite,Unit Building , Floor , Etc(optinal)"
+                    value={address_2}
+                    onChange={(e) => setAddress_2(e.target.value)}
+                  />
+                </div>
 
-              <button onClick={SettingHandeller}>Save</button>
-            </div>
+                <button onClick={SettingHandeller}>Save</button>
+              </div>
+            )}
           </div>
 
           <div className="order-summary">
@@ -193,7 +195,7 @@ const CartProcess = ({ TotalPrice }) => {
                     name="paying"
                     value="cash"
                   ></input>
-                  <label for="cash"> cash on delivery</label>
+                  <label htmlFor="cash"> cash on delivery</label>
                 </div>
                 <FaHome className="icon-01" />
               </div>
@@ -206,7 +208,7 @@ const CartProcess = ({ TotalPrice }) => {
                     name="paying"
                     value="credit"
                   ></input>
-                  <label for="credit"> credit / debit card</label>
+                  <label htmlFor="credit"> credit / debit card</label>
                 </div>
                 <FaCreditCard className="icon-02" />
               </div>
