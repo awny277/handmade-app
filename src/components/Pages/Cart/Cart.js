@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Cart.css";
 import { FaTrashAlt, FaPlus, FaMinus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import ImagePath from "../../../image/emptyCart.png";
 import axios from "axios";
 
 const Cart = ({ setTotalPrice, TotalLength }) => {
@@ -36,7 +37,16 @@ const Cart = ({ setTotalPrice, TotalLength }) => {
         <h2>shopping bag </h2>
         <div className="carts">
           <div className="cart-section">
-            <h3>my shooping bag ({cartItems.length} items)</h3>
+            {cartItems.length === 0 ? (
+              <div className="EmptyCart">
+                <h1>Cart is empty</h1>
+                <div className="EmptyCartdiv">
+                  <img src={ImagePath} alt="EmptyCart" />
+                </div>
+              </div>
+            ) : (
+              <h3>my shooping bag ({cartItems.length} items)</h3>
+            )}
             {cartItems.map((ele, idx) => {
               return (
                 <div className="cart-details" key={idx}>

@@ -38,10 +38,14 @@ const NavBar = ({ userInfo, TotalLenght }) => {
             <NavLink to={"/specialProductPage"} className="nav-link">
               Special order
             </NavLink>
-            <NavLink to={"/cart"} className="nav-link cartLink">
-              <FaOpencart className="cartIcon" />
-              <span>{TotalLenght}</span>
-            </NavLink>
+
+            {window.localStorage.getItem("isOline") === "true" && (
+              <NavLink to={"/cart"} className="nav-link cartLink">
+                <FaOpencart className="cartIcon" />
+                <span>{TotalLenght}</span>
+              </NavLink>
+            )}
+
             {window.localStorage.getItem("isOline") === "true" ? (
               <DropdownButton
                 id="dropdown-basic-button"

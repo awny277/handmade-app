@@ -227,3 +227,10 @@ background-color: white;
   }
 
 }
+.EmptyCart div {
+  width: 500px;
+  margin: 20px auto;
+}
+.EmptyCart img {
+  width: 100%;
+}
