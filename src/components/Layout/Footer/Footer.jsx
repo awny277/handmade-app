@@ -48,17 +48,6 @@ const Footer = () => {
             </div>
           </Col>
           <Col>
-            <div className="categories Footer-categories">
-              <h3>Categories</h3>
-              <a href="/"> test</a>
-              <a href="/"> test</a>
-              <a href="/"> test</a>
-              <a href="/"> test</a>
-              <a href="/"> test</a>
-              <a href="/"> test</a>
-            </div>
-          </Col>
-          <Col>
             <div className="categories Footer-information">
               <h3>Information</h3>
               <a href="/"> About us</a>

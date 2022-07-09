@@ -89,3 +89,11 @@
         padding: 10px !important;
     }
 }
+
+.ImageNodata .ImageDiv {
+    width: 500px;
+    margin: 20px auto;
+}
+.ImageNodata img {
+    width: 100%;
+}

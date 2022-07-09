@@ -30,7 +30,7 @@
   padding: 10px;
   background-color: white;
   position: sticky;
-  top: 100px;
+  top: 125px;
   border-radius: 10px;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
@@ -85,9 +85,6 @@
 .newProject-page span {
   margin: 5px 10px 5px 0 ;
   font-size: var(--fontsize-medium);
-}
-.newProject-page p {
-    
 }
 
 .searchInput {

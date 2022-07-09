@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Cart.css";
 import { FaTrashAlt, FaPlus, FaMinus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import ImagePath from "../../../image/emptyCart.png";
 import axios from "axios";
 
 const Cart = ({ setTotalPrice, TotalLength }) => {
@@ -22,13 +23,30 @@ const Cart = ({ setTotalPrice, TotalLength }) => {
     return acc + price;
   }, 0);
 
+  const HandelCheckout = () => {
+    if (window.localStorage.getItem("Profilepdated") === "true") {
+      navigate(`/cartProcess`);
+    } else {
+      navigate(`/profile/setting`);
+    }
+  };
+
   return (
     <div className="main-Header">
       <div className=" container container-cart">
         <h2>shopping bag </h2>
         <div className="carts">
           <div className="cart-section">
-            <h3>my shooping bag ({cartItems.length} items)</h3>
+            {cartItems.length === 0 ? (
+              <div className="EmptyCart">
+                <h1>Cart is empty</h1>
+                <div className="EmptyCartdiv">
+                  <img src={ImagePath} alt="EmptyCart" />
+                </div>
+              </div>
+            ) : (
+              <h3>my shooping bag ({cartItems.length} items)</h3>
+            )}
             {cartItems.map((ele, idx) => {
               return (
                 <div className="cart-details" key={idx}>
@@ -83,12 +101,7 @@ const Cart = ({ setTotalPrice, TotalLength }) => {
                   <p>subtotal</p>
                   <span>EGP{Totalprice}</span>
                 </div>
-                <button
-                  type=""
-                  onClick={() => {
-                    navigate(`/cartProcess`);
-                  }}
-                >
+                <button type="" onClick={HandelCheckout}>
                   CONTINUE TO CHECKOUT
                 </button>
               </div>

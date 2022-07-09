@@ -6,7 +6,7 @@ import { FaShoppingBag, FaClock, FaMapPin } from "react-icons/fa";
 import Swal from "sweetalert2";
 import moment from "moment";
 
-const SpecialProductDetailsPage = ({ userInfo }) => {
+const SpecialProductDetailsPage = ({ getAllOffers }) => {
   const [result, setResult] = useState({});
   const params = useParams();
   const [sendBudget, setSendBudget] = useState("");
@@ -39,7 +39,7 @@ const SpecialProductDetailsPage = ({ userInfo }) => {
 
   const formSubmit = (e) => {
     const validateAcountOffer = offers.filter(
-      (ele) => ele.accountUserOffer === userInfo.email
+      (ele) => ele.accountUserOffer === window.localStorage.getItem("email")
     );
     console.log(validateAcountOffer.length);
     if (localStorage.getItem("isOline") === "false") {
@@ -105,8 +105,8 @@ const SpecialProductDetailsPage = ({ userInfo }) => {
           ExpectedTime: sendDelivarDays,
           OfferValue: sendBudget,
           OfferDetails: sendOfferDetails,
-          userOffer: userInfo.userName,
-          accountUserOffer: userInfo.email,
+          userOffer: window.localStorage.getItem("userName"),
+          accountUserOffer: window.localStorage.getItem("email"),
         },
       ];
       const offer = result.offer.concat(data);
@@ -115,7 +115,10 @@ const SpecialProductDetailsPage = ({ userInfo }) => {
           `https://6259ff6a43fda1299a146d28.mockapi.io/specialProdect/${id}`,
           { offer }
         )
-        .then(setOffers(offer));
+        .then(() => {
+          setOffers(offer);
+          getAllOffers(offer);
+        });
       Reset();
     }
   };
@@ -231,13 +234,7 @@ const SpecialProductDetailsPage = ({ userInfo }) => {
                             </div>
                           </div>
                         </div>
-                        <p>
-                          Lorem, ipsum dolor sit amet consectetur adipisicing
-                          elit. Inventore minus voluptatum, iusto excepturi,
-                          distinctio est expedita fugiat iure dolore nam quidem
-                          dolores placeat ullam molestias? Nesciunt minima
-                          voluptate atque earum.
-                        </p>
+                        <p>{ele.OfferDetails}</p>
                         <hr />
                       </div>
                     );

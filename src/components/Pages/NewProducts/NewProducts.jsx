@@ -60,7 +60,7 @@ const NewProducts = ({ newProdcuts }) => {
           <Row>
             <Col md={3}>
               <div className="filter-section">
-                <h5> filter by material :</h5>
+                <h5>Filter by Material :</h5>
                 <div className="input-section">
                   <input
                     ref={All}
